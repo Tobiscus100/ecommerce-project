@@ -109,3 +109,12 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+.card {
+  height: 100%;
+}
+
+.card-title {
+  height: 40px; /* Ensures titles don't push content down unevenly */
+  overflow: hidden;
+}
