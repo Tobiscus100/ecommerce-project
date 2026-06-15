@@ -1,22 +1,30 @@
 import { Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import Rating from './Rating'
 
 function Product({ product }) {
   return (
-    <Card className="my-3 p-3 rounded">
+    <Card className="my-3 p-3 rounded shadow-sm border-0">
       <Link to={`/product/${product._id}`}>
-        {/* We will handle images properly in the next step */}
-        <Card.Img src={product.image} variant="top" />
+        <Card.Img src={product.image} variant="top" className="rounded" style={{ objectFit: 'cover', height: '200px' }} />
       </Link>
 
-      <Card.Body>
-        <Link to={`/product/${product._id}`} style={{ textDecoration: 'none' }}>
-          <Card.Title as="div">
+      <Card.Body className="d-flex flex-column justify-content-between">
+        <Link to={`/product/${product._id}`} style={{ textDecoration: 'none', color: '#333' }}>
+          <Card.Title as="div" className="mb-1">
             <strong>{product.name}</strong>
           </Card.Title>
         </Link>
 
-        <Card.Text as="h3">
+        {/* This is where the magic happens */}
+        <Card.Text as="div">
+          <Rating 
+            value={product.rating} 
+            text={`${product.numReviews} reviews`} 
+          />
+        </Card.Text>
+
+        <Card.Text as="h4" className="mt-2 color-dark fw-bold">
           ${product.price}
         </Card.Text>
       </Card.Body>
