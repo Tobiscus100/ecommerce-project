@@ -1,3 +1,4 @@
+import ProfileScreen from './screens/ProfileScreen'
 import LoginScreen from './screens/LoginScreen'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
@@ -19,6 +20,7 @@ function App() {
             <Route path='/' element={<HomeScreen />} exact />
             <Route path='/product/:id' element={<ProductScreen />} />
             <Route path='/cart/:id?' element={<CartScreen />} />
+            <Route path='/profile' element={<ProfileScreen />} />
           </Routes>
         </Container>
       </main>

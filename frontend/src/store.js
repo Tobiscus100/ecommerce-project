@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { productListReducer, productDetailsReducer } from './reducers/productReducers'
 import { cartReducer } from './reducers/cartReducers'
-import { userLoginReducer, userRegisterReducer } from './reducers/userReducers'
+import { userLoginReducer, userRegisterReducer, userUpdateProfileReducer, userDetailsReducer } from './reducers/userReducers'
 
 // Load cart items from local storage if they exist
 const cartItemsFromStorage = localStorage.getItem('cartItems')
@@ -19,6 +19,9 @@ const store = configureStore({
         cart: cartReducer, 
         userLogin: userLoginReducer,
         userRegister: userRegisterReducer,
+        userDetails: userDetailsReducer,
+        userUpdateProfile: userUpdateProfileReducer,
+        // Add other reducers here as needed
         // Inject cart state
     },
     preloadedState: {
