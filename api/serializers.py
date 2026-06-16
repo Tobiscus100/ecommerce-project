@@ -1,7 +1,20 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
+from .models import Product # Ensure your Product model is imported correctly
 
+# =====================================================================
+# 1. PRODUCT SERIALIZER (Restored for HomeScreen / ProductScreen)
+# =====================================================================
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+
+# =====================================================================
+# 2. USER PROFILE SERIALIZERS (For Authentication Flow)
+# =====================================================================
 class UserSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField(read_only=True)
     _id = serializers.SerializerMethodField(read_only=True)
@@ -23,20 +36,16 @@ class UserSerializer(serializers.ModelSerializer):
             name = obj.email
         return name
 
-# This serializer customizes the JWT response data
+
 class MyTokenObtainPairSerializer(RefreshToken):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-
-        # Add custom claims into the token payload if needed
         token['username'] = user.username
         token['name'] = user.first_name
-        
         return token
 
     def validate(self, attrs):
-        # This is what gets sent back in the API response data block
         data = super().validate(attrs)
         
         serializer = UserSerializerWithToken(self.user).data
@@ -45,7 +54,7 @@ class MyTokenObtainPairSerializer(RefreshToken):
             
         return data
 
-# Serializer that includes the token inside the user details object
+
 class UserSerializerWithToken(UserSerializer):
     token = serializers.SerializerMethodField(read_only=True)
 
