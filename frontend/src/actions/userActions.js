@@ -40,3 +40,11 @@ export const login = (email, password) => async (dispatch) => {
         })
     }
 }
+
+export const logout = () => (dispatch) => {
+    // Wipe data from browser memory
+    localStorage.removeItem('userInfo')
+    
+    // Clear data out of global Redux state
+    dispatch({ type: USER_LOGOUT })
+}
