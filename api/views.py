@@ -60,3 +60,32 @@ def registerUser(request):
     except Exception as e:
         content = {'detail': 'Something went wrong during registration'}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    
+# ... keep your existing imports and views exactly as they are ...
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated]) # Locks this endpoint down to logged-in users only
+def getUserProfile(request):
+    user = request.user # Django automatically pulls the correct user from the JWT token
+    serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated]) # Locks this endpoint down so only the token owner can modify it
+def updateUserProfile(request):
+    user = request.user
+    serializer = UserSerializerWithToken(user, many=False)
+    
+    data = request.data
+    user.first_name = data['name']
+    user.username = data['email']
+    user.email = data['email']
+    
+    # Only update password if the user typed something into that field
+    if data['password'] != '':
+        user.password = make_password(data['password'])
+        
+    user.save()
+    
+    return Response(serializer.data)
