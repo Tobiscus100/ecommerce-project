@@ -13,8 +13,11 @@ function LoginScreen() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    // Find if a redirect path exists in the URL parameters (e.g., ?redirect=shipping)
-    const redirect = searchParams.get('redirect') ? searchParams.get('redirect') : '/'
+    // FIXED: Ensure the path begins with a leading slash to make it an absolute route navigation
+    const redirectParam = searchParams.get('redirect')
+    const redirect = redirectParam 
+        ? (redirectParam.startsWith('/') ? redirectParam : `/${redirectParam}`) 
+        : '/'
 
     const userLogin = useSelector(state => state.userLogin)
     const { error, loading, userInfo } = userLogin

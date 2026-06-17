@@ -5,9 +5,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from rest_framework import status
 
-# Import BOTH models and serializers correctly
+# Import BOTH models and all needed serializers correctly
 from .models import Product
-from .serializers import ProductSerializer, UserSerializerWithToken
+from .serializers import ProductSerializer, UserSerializer, UserSerializerWithToken
 
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import MyTokenObtainPairSerializer
@@ -25,7 +25,7 @@ def getProducts(request):
 
 
 @api_view(['GET'])
-def getProduct(request):
+def getProduct(request, pk):
     product = Product.objects.get(_id=pk)
     serializer = ProductSerializer(product, many=False)
     return Response(serializer.data)
@@ -60,32 +60,38 @@ def registerUser(request):
     except Exception as e:
         content = {'detail': 'Something went wrong during registration'}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
-    
-# ... keep your existing imports and views exactly as they are ...
+
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated]) # Locks this endpoint down to logged-in users only
+@permission_classes([IsAuthenticated])
 def getUserProfile(request):
-    user = request.user # Django automatically pulls the correct user from the JWT token
+    user = request.user 
     serializer = UserSerializer(user, many=False)
     return Response(serializer.data)
 
 
 @api_view(['PUT'])
-@permission_classes([IsAuthenticated]) # Locks this endpoint down so only the token owner can modify it
+@permission_classes([IsAuthenticated])
 def updateUserProfile(request):
     user = request.user
-    serializer = UserSerializerWithToken(user, many=False)
-    
     data = request.data
+    
+    # Update core details
     user.first_name = data['name']
     user.username = data['email']
     user.email = data['email']
     
     # Only update password if the user typed something into that field
-    if data['password'] != '':
+    if data.get('password', '') != '':
         user.password = make_password(data['password'])
         
     user.save()
     
-    return Response(serializer.data)
+    # Generate the fresh token dataset
+    serializer = UserSerializerWithToken(user, many=False)
+    responseData = serializer.data
+    
+    # 🌟 THE BULLETPROOF LOCK: Mirror the token to both potential frontend keys
+    responseData['access'] = responseData.get('token')
+    
+    return Response(responseData)

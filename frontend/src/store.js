@@ -2,8 +2,8 @@ import { configureStore } from '@reduxjs/toolkit'
 import { productListReducer, productDetailsReducer } from './reducers/productReducers'
 import { cartReducer } from './reducers/cartReducers'
 import { userLoginReducer, userRegisterReducer, userUpdateProfileReducer, userDetailsReducer } from './reducers/userReducers'
+import { orderCreateReducer, orderDetailsReducer } from './reducers/orderReducers' // Imported orderDetails
 
-// Load cart items from local storage if they exist
 const cartItemsFromStorage = localStorage.getItem('cartItems')
     ? JSON.parse(localStorage.getItem('cartItems'))
     : []
@@ -11,6 +11,10 @@ const cartItemsFromStorage = localStorage.getItem('cartItems')
 const userInfoFromStorage = localStorage.getItem('userInfo')
     ? JSON.parse(localStorage.getItem('userInfo'))
     : null
+
+const shippingAddressFromStorage = localStorage.getItem('shippingAddress')
+    ? JSON.parse(localStorage.getItem('shippingAddress'))
+    : {}
 
 const store = configureStore({
     reducer: {
@@ -21,11 +25,14 @@ const store = configureStore({
         userRegister: userRegisterReducer,
         userDetails: userDetailsReducer,
         userUpdateProfile: userUpdateProfileReducer,
-        // Add other reducers here as needed
-        // Inject cart state
+        orderCreate: orderCreateReducer,
+        orderDetails: orderDetailsReducer, // Registered here
     },
     preloadedState: {
-        cart: { cartItems: cartItemsFromStorage },
+        cart: { 
+            cartItems: cartItemsFromStorage,
+            shippingAddress: shippingAddressFromStorage 
+        },
         userLogin: { userInfo: userInfoFromStorage }
     }
 })

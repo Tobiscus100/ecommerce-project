@@ -1,7 +1,9 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Product # Ensure your Product model is imported correctly
+# IMPORT THE CORRECT BASE SERIALIZER:
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from .models import Product 
 
 # =====================================================================
 # 1. PRODUCT SERIALIZER (Restored for HomeScreen / ProductScreen)
@@ -37,7 +39,8 @@ class UserSerializer(serializers.ModelSerializer):
         return name
 
 
-class MyTokenObtainPairSerializer(RefreshToken):
+# FIXED: Inheriting from the correct TokenObtainPairSerializer class!
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
@@ -48,6 +51,7 @@ class MyTokenObtainPairSerializer(RefreshToken):
     def validate(self, attrs):
         data = super().validate(attrs)
         
+        # Injects your custom fields (including 'token') into the final login response
         serializer = UserSerializerWithToken(self.user).data
         for k, v in serializer.items():
             data[k] = v

@@ -19,8 +19,10 @@ function CartScreen() {
     useEffect(() => {
         if (id) {
             dispatch(addToCart(id, qty))
+            // FIXED: Changed True to lowercase true so JavaScript doesn't crash
+            navigate('/cart', { replace: true })
         }
-    }, [dispatch, id, qty])
+    }, [dispatch, id, qty, navigate])
 
     const removeFromCartHandler = (productId) => {
         dispatch(removeFromCart(productId))
