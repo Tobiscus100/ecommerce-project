@@ -7,189 +7,148 @@ django.setup()
 
 from api.models import Product
 
-print("Wiping database for the definitive, 100% image-vetted catalog...")
+print("Wiping database for the highly optimized 25-item high-res catalog...")
 Product.objects.all().delete()
 
-# 100 familiar, unique products using clean, non-blocked source image endpoints
+# Exactly 5 familiar, distinct items per department with verified direct image links
 premium_items = [
-    # === ELECTRONICS (20 Unique Items) ===
-    {'name': 'Samsung 65-inch 4K Smart QLED TV', 'brand': 'Samsung', 'category': 'Electronics', 'price': 899.99, 'countInStock': 5, 'image': 'https://images.unsplash.com/photo-1593305841991-05c297ba4575', 'description': 'Experience breathtaking color clarity with an intelligent 4K processor.'},
-    {'name': 'Apple Watch Series 9 GPS', 'brand': 'Apple', 'category': 'Electronics', 'price': 399.00, 'countInStock': 12, 'image': 'https://images.unsplash.com/photo-1434494878577-86c23bcb06b9', 'description': 'Advanced health tracking, a brighter display, and faster performance.'},
-    {'name': 'Canon EOS R5 Mirrorless Camera', 'brand': 'Canon', 'category': 'Electronics', 'price': 2499.00, 'countInStock': 3, 'image': 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32', 'description': 'Professional grade mirrorless camera featuring 45 Megapixel stills.'},
-    {'name': 'Sony WH-1000XM5 Wireless Headphones', 'brand': 'Sony', 'category': 'Electronics', 'price': 348.00, 'countInStock': 15, 'image': 'https://images.unsplash.com/photo-1546435770-a3e426bf472b', 'description': 'Industry-leading noise cancellation and magnificent audio fidelity.'},
-    {'name': 'Apple MacBook Pro 14-inch M3', 'brand': 'Apple', 'category': 'Electronics', 'price': 1599.00, 'countInStock': 8, 'image': 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8', 'description': 'Supercharged by the M3 chip, delivering extreme speed and battery life.'},
-    {'name': 'HP 24-inch Full HD Monitor', 'brand': 'HP', 'category': 'Electronics', 'price': 149.99, 'countInStock': 20, 'image': 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf', 'description': 'Sleek, borderless display monitor perfect for everyday workspace viewing.'},
-    {'name': 'Apple iPad Air 11-inch Wi-Fi', 'brand': 'Apple', 'category': 'Electronics', 'price': 599.00, 'countInStock': 10, 'image': 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0', 'description': 'Incredibly thin design featuring a gorgeous Liquid Retina display.'},
-    {'name': 'Sony PlayStation 5 Console Slim', 'brand': 'Sony', 'category': 'Electronics', 'price': 499.99, 'countInStock': 6, 'image': 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db', 'description': 'Experience lightning-fast loading speeds and next-gen gaming performance.'},
-    {'name': 'Logitech G502 Gaming Wireless Mouse', 'brand': 'Logitech', 'category': 'Electronics', 'price': 119.50, 'countInStock': 25, 'image': 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7', 'description': 'High-performance optical sensor mouse with custom programmable buttons.'},
-    {'name': 'Anker 10,000mAh Portable Power Bank', 'brand': 'Anker', 'category': 'Electronics', 'price': 29.99, 'countInStock': 40, 'image': 'https://images.unsplash.com/photo-1622445262465-2481c4574875', 'description': 'Ultra-slim external battery pack providing high-speed universal charging.'},
-    {'name': 'Apple iPhone 15 Pro Max', 'brand': 'Apple', 'category': 'Electronics', 'price': 1199.99, 'countInStock': 7, 'image': 'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5', 'description': 'Forged in titanium, featuring the groundbreaking A17 Pro chip.'},
-    {'name': 'Nintendo Switch OLED Model', 'brand': 'Nintendo', 'category': 'Electronics', 'price': 349.99, 'countInStock': 14, 'image': 'https://images.unsplash.com/photo-1578303512597-81e6cc155b3e', 'description': 'Vibrant 7-inch OLED screen for seamless handheld gaming anywhere.'},
-    {'name': 'Bose SoundLink Bluetooth Speaker', 'brand': 'Bose', 'category': 'Electronics', 'price': 149.00, 'countInStock': 18, 'image': 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1', 'description': 'Deep, loud, and immersive sound with true 360-degree coverage.'},
-    {'name': 'GoPro HERO12 Black Action Camera', 'brand': 'GoPro', 'category': 'Electronics', 'price': 399.99, 'countInStock': 9, 'image': 'https://images.unsplash.com/photo-1565849904461-09a7df700557', 'description': 'Best-in-class image quality, rugged stabilization, and high frame rates.'},
-    {'name': 'Amazon Echo Dot 5th Gen Speaker', 'brand': 'Amazon', 'category': 'Electronics', 'price': 49.99, 'countInStock': 35, 'image': 'https://images.unsplash.com/photo-1543510473-ac2c35329a28', 'description': 'Our best-sounding Echo Dot yet for clear vocals and deep bass with Alexa.'},
-    {'name': 'Razer BlackWidow Gaming Keyboard', 'brand': 'Razer', 'category': 'Electronics', 'price': 139.99, 'countInStock': 11, 'image': 'https://images.unsplash.com/photo-1618384887929-16ec33fab9ef', 'description': 'Mechanical gaming keyboard designed with responsive clicky switches.'},
-    {'name': 'DJI Mini 4 Pro Drone Camera', 'brand': 'DJI', 'category': 'Electronics', 'price': 759.00, 'countInStock': 4, 'image': 'https://images.unsplash.com/photo-1508614589041-895b88991e3e', 'description': 'Ultra-lightweight folding mini camera drone with obstacle sensing.'},
-    {'name': 'SanDisk 1TB Portable External SSD', 'brand': 'SanDisk', 'category': 'Electronics', 'price': 99.99, 'countInStock': 30, 'image': 'https://images.unsplash.com/photo-1546868871-7041f2a55e12', 'description': 'Solid state performance featuring high-speed read and write transfers.'},
-    {'name': 'Blue Yeti USB Desktop Microphone', 'brand': 'Blue', 'category': 'Electronics', 'price': 129.00, 'countInStock': 16, 'image': 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc', 'description': 'Create unparalleled recordings directly into your computer with ease.'},
-    {'name': 'Asus ROG Gaming Laptop Intel i9', 'brand': 'Asus', 'category': 'Electronics', 'price': 1899.00, 'countInStock': 5, 'image': 'https://images.unsplash.com/photo-1603302576837-37561b2e2302', 'description': 'High-end gaming laptop with lightning fast refresh rates and ray-tracing graphics.'},
+    # --- ELECTRONICS (5 Items) ---
+    {
+        'name': 'Samsung 65-inch 4K Smart QLED TV', 'brand': 'Samsung', 'category': 'Electronics', 'price': 899.99, 'countInStock': 5, 
+        'image': 'https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=500',
+        'description': 'Experience breathtaking color clarity with an intelligent 4K processor and built-in streaming apps.'
+    },
+    {
+        'name': 'Apple Watch Series 9 GPS', 'brand': 'Apple', 'category': 'Electronics', 'price': 399.00, 'countInStock': 12, 
+        'image': 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=500',
+        'description': 'Advanced health tracking, a brighter display, and faster performance to keep you connected.'
+    },
+    {
+        'name': 'Canon EOS R5 Mirrorless Camera', 'brand': 'Canon', 'category': 'Electronics', 'price': 2499.00, 'countInStock': 3, 
+        'image': 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500',
+        'description': 'Professional grade mirrorless camera featuring 45 Megapixel stills and internal 8K video recording.'
+    },
+    {
+        'name': 'Sony WH-1000XM5 Wireless Headphones', 'brand': 'Sony', 'category': 'Electronics', 'price': 348.00, 'countInStock': 15, 
+        'image': 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=500',
+        'description': 'Industry-leading noise cancellation and magnificent audio fidelity with crystal-clear hands-free calling.'
+    },
+    {
+        'name': 'Apple MacBook Pro 14-inch M3', 'brand': 'Apple', 'category': 'Electronics', 'price': 1599.00, 'countInStock': 8, 
+        'image': 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500',
+        'description': 'Supercharged by the M3 chip, delivering extreme speed and staggering battery life for power users.'
+    },
 
-    # === ACCESSORIES (20 Unique Items) ===
-    {'name': 'Rolex Oyster Perpetual Luxury Watch', 'brand': 'Rolex', 'category': 'Accessories', 'price': 6500.00, 'countInStock': 2, 'image': 'https://images.unsplash.com/photo-1523275335684-37898b6baf30', 'description': 'Timeless mechanical luxury watch crafted from premium corrosion-resistant steel.'},
-    {'name': 'Ray-Ban Classic Wayfarer Sunglasses', 'brand': 'Ray-Ban', 'category': 'Accessories', 'price': 163.00, 'countInStock': 30, 'image': 'https://images.unsplash.com/photo-1511499767150-a48a237f0083', 'description': 'The iconic silhouette with crystal clear polarized protection lenses.'},
-    {'name': '18k Gold Minimalist Chain Necklace', 'brand': 'JewelCraft', 'category': 'Accessories', 'price': 249.00, 'countInStock': 15, 'image': 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f', 'description': 'Elegant, finely polished solid gold layering chain necklace for daily wear.'},
-    {'name': 'Fossil Men Leather Minimalist Wallet', 'brand': 'Fossil', 'category': 'Accessories', 'price': 48.00, 'countInStock': 50, 'image': 'https://images.unsplash.com/photo-1627123424574-724758594e93', 'description': 'Genuine bifold slim leather wallet featuring clear card layout slots.'},
-    {'name': 'Nike Air Heritage Urban Backpack', 'brand': 'Nike', 'category': 'Accessories', 'price': 45.00, 'countInStock': 35, 'image': 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62', 'description': 'Spacious dual-zipper compartment with an integrated padded laptop sleeve.'},
-    {'name': 'Gucci Premium Leather Waist Belt', 'brand': 'Gucci', 'category': 'Accessories', 'price': 420.00, 'countInStock': 5, 'image': 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80', 'description': 'Luxury smooth black Italian leather belt with an iconic interlocking buckle.'},
-    {'name': 'Casio Vintage Digital Sport Watch', 'brand': 'Casio', 'category': 'Accessories', 'price': 25.00, 'countInStock': 100, 'image': 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9', 'description': 'Classic metallic retro digital stopwatch watch featuring a daily alarm.'},
-    {'name': 'Silver Diamond Stud Earrings Set', 'brand': 'JewelCraft', 'category': 'Accessories', 'price': 129.00, 'countInStock': 20, 'image': 'https://images.unsplash.com/photo-1635767798638-3e25273a8236', 'description': 'Brilliant round-cut cubic zirconia gems mounted on sterling silver studs.'},
-    {'name': 'Herschel Supply Co. Travel Duffle Bag', 'brand': 'Herschel', 'category': 'Accessories', 'price': 89.99, 'countInStock': 18, 'image': 'https://images.unsplash.com/photo-1544816155-12df9643f363', 'description': 'The perfect weekend travel canvas duffle bag with a custom lining.'},
-    {'name': 'Stainless Steel Minimalist Key Ring', 'brand': 'Orbit', 'category': 'Accessories', 'price': 15.00, 'countInStock': 75, 'image': 'https://images.unsplash.com/photo-1582139329536-e7284fece509', 'description': 'Heavy-duty aircraft grade securing wire loop clip for pocket key management.'},
-    {'name': 'Michael Kors Luxury Leather Handbag', 'brand': 'Michael Kors', 'category': 'Accessories', 'price': 298.00, 'countInStock': 8, 'image': 'https://images.unsplash.com/photo-1584917865442-de89df76afd3', 'description': 'Premium saffiano leather shoulder tote with gold-tone hardware details.'},
-    {'name': 'Pure Sterling Silver Link Loop Bracelet', 'brand': 'JewelCraft', 'category': 'Accessories', 'price': 79.00, 'countInStock': 25, 'image': 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a', 'description': 'A beautiful delicate silver infinity loop band with adjustable clasp links.'},
-    {'name': 'Oakley Holbrook Sports Sunglasses', 'brand': 'Oakley', 'category': 'Accessories', 'price': 142.00, 'countInStock': 15, 'image': 'https://images.unsplash.com/photo-1572635196237-14b3f281503f', 'description': 'High-performance durable sunglasses tailored for sport and active travel.'},
-    {'name': 'Samsonite Hard Shell Luggage Suitcase', 'brand': 'Samsonite', 'category': 'Accessories', 'price': 169.99, 'countInStock': 12, 'image': 'https://images.unsplash.com/photo-1563911302283-d2bc1d98a75e', 'description': 'Ultra-lightweight polycarbonate luggage shell rolling on 360 spinner wheels.'},
-    {'name': 'Premium Woven Silk Necktie Blue', 'brand': 'Zara', 'category': 'Accessories', 'price': 34.00, 'countInStock': 40, 'image': 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35', 'description': 'Handmade woven smooth silk necktie perfect for formal corporate outfits.'},
-    {'name': 'Adidas Classic Twill Baseball Cap', 'brand': 'Adidas', 'category': 'Accessories', 'price': 22.00, 'countInStock': 60, 'image': 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b', 'description': 'Breathable cotton curved brim cap equipped with an adjustable back slider.'},
-    {'name': 'Fossil Chronograph Black Dial Watch', 'brand': 'Fossil', 'category': 'Accessories', 'price': 115.00, 'countInStock': 14, 'image': 'https://images.unsplash.com/photo-1547996160-81dfa63595aa', 'description': 'Bold multi-dial sports watch with custom detailed intervals and leather straps.'},
-    {'name': 'Supreme Urban Street Fanny Pack', 'brand': 'Supreme', 'category': 'Accessories', 'price': 85.00, 'countInStock': 10, 'image': 'https://images.unsplash.com/photo-1622560480605-d83c853bc5c3', 'description': 'Hype streetwear utility waist pack utilizing high-durability cordura mesh.'},
-    {'name': 'Gold Plating Stainless Engagement Ring', 'brand': 'JewelCraft', 'category': 'Accessories', 'price': 45.00, 'countInStock': 30, 'image': 'https://images.unsplash.com/photo-1605100804763-247f67b3557e', 'description': 'Hypoallergenic thick band mirror finish stackable jewelry ring.'},
-    {'name': 'Nike Cuffed Thermal Winter Beanie', 'brand': 'Nike', 'category': 'Accessories', 'price': 18.00, 'countInStock': 50, 'image': 'https://images.unsplash.com/photo-1576871337622-98d48d4aa53e', 'description': 'Insulated thick acrylic cuffed thermal skull hat perfect for winter.'},
+    # --- ACCESSORIES (5 Items) ---
+    {
+        'name': 'Rolex Oyster Perpetual Luxury Watch', 'brand': 'Rolex', 'category': 'Accessories', 'price': 6500.00, 'countInStock': 2, 
+        'image': 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500',
+        'description': 'Timeless mechanical luxury watch crafted from premium corrosion-resistant stainless steel.'
+    },
+    {
+        'name': 'Ray-Ban Classic Wayfarer Sunglasses', 'brand': 'Ray-Ban', 'category': 'Accessories', 'price': 163.00, 'countInStock': 30, 
+        'image': 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=500',
+        'description': 'The iconic silhouette with crystal clear polarized protection lenses and full UV safety.'
+    },
+    {
+        'name': '18k Gold Minimalist Chain Necklace', 'brand': 'JewelCraft', 'category': 'Accessories', 'price': 249.00, 'countInStock': 15, 
+        'image': 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500',
+        'description': 'Elegant, finely polished solid gold layering chain necklace for sophisticated daily wear.'
+    },
+    {
+        'name': 'Fossil Men Leather Minimalist Wallet', 'brand': 'Fossil', 'category': 'Accessories', 'price': 48.00, 'countInStock': 50, 
+        'image': 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=500',
+        'description': 'Genuine bifold slim leather wallet featuring clear card layout slots and a transparent ID window.'
+    },
+    {
+        'name': 'Nike Air Heritage Urban Backpack', 'brand': 'Nike', 'category': 'Accessories', 'price': 45.00, 'countInStock': 35, 
+        'image': 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500',
+        'description': 'Spacious dual-zipper compartment with an integrated padded notebook/laptop sleeve.'
+    },
 
-    # === APPAREL (20 Unique Items) ===
-    {'name': 'Nike Air Max 270 Sneakers', 'brand': 'Nike', 'category': 'Apparel', 'price': 160.00, 'countInStock': 14, 'image': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff', 'description': 'Nikes first lifestyle Air Max unit shoe delivering visible bounce.'},
-    {'name': 'Adidas Essentials Fleece Hoodie', 'brand': 'Adidas', 'category': 'Apparel', 'price': 65.00, 'countInStock': 25, 'image': 'https://images.unsplash.com/photo-1556821840-3a63f95609a7', 'description': 'Ultra-soft cotton blend overhead casual sweater hoodie with classic comfort.'},
-    {'name': 'Levi Strauss Premium Denim Jacket', 'brand': 'Levis', 'category': 'Apparel', 'price': 98.00, 'countInStock': 12, 'image': 'https://images.unsplash.com/photo-1576995853123-5a10305d93c0', 'description': 'An architectural staple since 1967. Sturdy unlined raw denim fit.'},
-    {'name': 'Puma Slim Fit Training Trackpants', 'brand': 'Puma', 'category': 'Apparel', 'price': 45.00, 'countInStock': 30, 'image': 'https://images.unsplash.com/photo-1551854838-212c50b4c184', 'description': 'Moisture-managing active polyester sweatpants with zipper ankle panels.'},
-    {'name': 'Calvin Klein White Crewneck Tee', 'brand': 'Calvin Klein', 'category': 'Apparel', 'price': 35.00, 'countInStock': 100, 'image': 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518', 'description': 'Classic cotton knit signature foundational white tee shirt.'},
-    {'name': 'The North Face Rain Windbreaker', 'brand': 'The North Face', 'category': 'Apparel', 'price': 110.00, 'countInStock': 10, 'image': 'https://images.unsplash.com/photo-1548883354-7622d03aca27', 'description': 'Fully waterproof breathable outer shell layer made for weather protection.'},
-    {'name': 'Timberland 6-inch Waterproof Boots', 'brand': 'Timberland', 'category': 'Apparel', 'price': 198.00, 'countInStock': 8, 'image': 'https://images.unsplash.com/photo-1638247025967-b4e38f6893b4', 'description': 'The iconic heavy-duty nubuck leather boots insulated with rustproof hardware.'},
-    {'name': 'Champion Reverse Weave Sweatshirt', 'brand': 'Champion', 'category': 'Apparel', 'price': 55.00, 'countInStock': 40, 'image': 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633', 'description': 'Heavyweight athletic cotton blend crewneck sweater resisting shrinkage.'},
-    {'name': 'Zara Tailored Fit Wool Winter Coat', 'brand': 'Zara', 'category': 'Apparel', 'price': 149.00, 'countInStock': 15, 'image': 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6', 'description': 'Elegant mid-length button closure modern lapel overcoat with heavy wool.'},
-    {'name': 'Under Armour Workout Performance Shorts', 'brand': 'Under Armour', 'category': 'Apparel', 'price': 30.00, 'countInStock': 60, 'image': 'https://images.unsplash.com/photo-1539185441755-769473a23570', 'description': 'Lightweight technical fabric shorts engineered to wick sweat away.'},
-    {'name': 'Nike Air Force 1 Retro Sneaker All-White', 'brand': 'Nike', 'category': 'Apparel', 'price': 115.00, 'countInStock': 20, 'image': 'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519', 'description': 'The legendary silhouette featuring crisp leather stitched overlays.'},
-    {'name': 'Converse Chuck Taylor High-Top Sneaker', 'brand': 'Converse', 'category': 'Apparel', 'price': 65.00, 'countInStock': 35, 'image': 'https://images.unsplash.com/photo-1607522370275-f14206abe5d3', 'description': 'Classic vintage canvas sneakers with the definitive iconic ankle patch.'},
-    {'name': 'H&M Casual Linen Collar Summer Shirt', 'brand': 'H&M', 'category': 'Apparel', 'price': 29.99, 'countInStock': 45, 'image': 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c', 'description': 'Airy woven linen casual beach top tailored with an open relaxed collar.'},
-    {'name': 'Levis 501 Original Fit Denim Jeans', 'brand': 'Levis', 'category': 'Apparel', 'price': 79.50, 'countInStock': 30, 'image': 'https://images.unsplash.com/photo-1542272604-787c3835535d', 'description': 'The blueprint for every pair of jeans in existence with a straight leg cut.'},
-    {'name': 'Tommy Hilfiger Pique Cotton Polo Shirt', 'brand': 'Tommy Hilfiger', 'category': 'Apparel', 'price': 59.50, 'countInStock': 40, 'image': 'https://images.unsplash.com/photo-1581655353564-df123a1eb820', 'description': 'Premium cotton pique custom regular fit top featuring embroidered flag logos.'},
-    {'name': 'Vans Old Skool Casual Canvas Skate Shoe', 'brand': 'Vans', 'category': 'Apparel', 'price': 70.00, 'countInStock': 25, 'image': 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77', 'description': 'The classic side-stripe skate shoe made with durable suede and canvas.'},
-    {'name': 'Uniqlo Ultra Light Down Travel Puffer Jacket', 'brand': 'Uniqlo', 'category': 'Apparel', 'price': 89.00, 'countInStock': 18, 'image': 'https://images.unsplash.com/photo-1544923246-77307dd654cb', 'description': 'Warm premium down insulation that folds compactly into a travel pouch.'},
-    {'name': 'Asics Gel-Kayano Performance Running Shoes', 'brand': 'Asics', 'category': 'Apparel', 'price': 160.00, 'countInStock': 12, 'image': 'https://images.unsplash.com/photo-1587563871167-1ee9c731aefb', 'description': 'Advanced stability running trainers providing structured underfoot safety.'},
-    {'name': 'Zara Classic Checkered Flannel Longsleeve', 'brand': 'Zara', 'category': 'Apparel', 'price': 45.90, 'countInStock': 22, 'image': 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10', 'description': 'Thick soft-brushed checkered flannel long sleeve with double chest pockets.'},
-    {'name': 'Columbia Full-Zip Thermal Fleece Jacket', 'brand': 'Columbia', 'category': 'Apparel', 'price': 50.00, 'countInStock': 28, 'image': 'https://images.unsplash.com/photo-1606912642145-20921098522e', 'description': 'Soft thermal lightweight fleece outerwear perfect as winter mid-layers.'},
+    # --- APPAREL (5 Items) ---
+    {
+        'name': 'Nike Air Max 270 Sneakers', 'brand': 'Nike', 'category': 'Apparel', 'price': 160.00, 'countInStock': 14, 
+        'image': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500',
+        'description': 'Nikes first lifestyle Air Max unit shoe delivering premium visible bounce with every step.'
+    },
+    {
+        'name': 'Adidas Essentials Fleece Hoodie', 'brand': 'Adidas', 'category': 'Apparel', 'price': 65.00, 'countInStock': 25, 
+        'image': 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500',
+        'description': 'Ultra-soft cotton blend overhead casual sweater hoodie with classic athletic comfort.'
+    },
+    {
+        'name': 'Levi Strauss Premium Denim Jacket', 'brand': 'Levis', 'category': 'Apparel', 'price': 98.00, 'countInStock': 12, 
+        'image': 'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=500',
+        'description': 'An American style staple since 1967. Sturdy unlined raw denim wash button-up coat.'
+    },
+    {
+        'name': 'Puma Slim Fit Training Trackpants', 'brand': 'Puma', 'category': 'Apparel', 'price': 45.00, 'countInStock': 30, 
+        'image': 'https://images.unsplash.com/photo-1551854838-212c50b4c184?w=500',
+        'description': 'Moisture-managing active polyester sports sweatpants with side pockets and zippered ankles.'
+    },
+    {
+        'name': 'Calvin Klein White Crewneck Tee', 'brand': 'Calvin Klein', 'category': 'Apparel', 'price': 35.00, 'countInStock': 100, 
+        'image': 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500',
+        'description': 'Classic knit cotton foundational premium plain white casual tee shirt.'
+    },
 
-    # === HOME & KITCHEN (20 Unique Items) ===
-    {'name': 'Nespresso Vertuo Capsule Coffee Maker', 'brand': 'Nespresso', 'category': 'Home & Kitchen', 'price': 179.00, 'countInStock': 11, 'image': 'https://images.unsplash.com/photo-1511920170033-f8396924c348', 'description': 'Automatic capsule brewing machine outputting single barista-grade espresso.'},
-    {'name': 'Ninja Professional 1000W Kitchen Blender', 'brand': 'Ninja', 'category': 'Home & Kitchen', 'price': 99.99, 'countInStock': 15, 'image': 'https://images.unsplash.com/photo-1578643463396-0997cb5328c1', 'description': 'High-velocity crush blades perfect for pulverizing ice and green smoothies.'},
-    {'name': 'Ceramic Matte Black Dinnerware 16pc Set', 'brand': 'StudioHome', 'category': 'Home & Kitchen', 'price': 85.00, 'countInStock': 20, 'image': 'https://images.unsplash.com/photo-1543510473-ac2c35329a28', 'description': 'Contemporary stoneware plates and bowls set finished with elegant glazes.'},
-    {'name': 'Teflon Non-Stick Cookware Frying Pan 12in', 'brand': 'T-fal', 'category': 'Home & Kitchen', 'price': 34.50, 'countInStock': 25, 'image': 'https://images.unsplash.com/photo-1593617316223-93cf8cb41398', 'description': 'Heavy-gauge aluminum pan with indicators for effortless meal cooking.'},
-    {'name': 'Scented Organic Lavender Soy Wax Jar Candle', 'brand': 'Ember', 'category': 'Home & Kitchen', 'price': 22.00, 'countInStock': 45, 'image': 'https://images.unsplash.com/photo-1603006905003-be475563bc59', 'description': 'Lavender and warm vanilla oil blend candle with clean long-burning wicks.'},
-    {'name': 'Traditional Woven Soft Floral Area Rug', 'brand': 'Orbit', 'category': 'Home & Kitchen', 'price': 135.00, 'countInStock': 7, 'image': 'https://images.unsplash.com/photo-1600121848594-d8644e57abab', 'description': 'Low-pile beautifully detailed accent floor mat for dining and living rooms.'},
-    {'name': 'Stainless Steel Wide Slot 2-Slice Toaster', 'brand': 'KitchenAid', 'category': 'Home & Kitchen', 'price': 49.99, 'countInStock': 14, 'image': 'https://images.unsplash.com/photo-162143407151-7111542de6e8', 'description': 'Extra-wide slot toaster with customizable shade dials and easy trays.'},
-    {'name': 'Pure Cotton Breathable Queen Bed Sheet Set', 'brand': 'Solace', 'category': 'Home & Kitchen', 'price': 58.00, 'countInStock': 30, 'image': 'https://images.unsplash.com/photo-1541558026976-17487a9393a9', 'description': 'Ultra-soft deep pocket four-piece bed set woven with natural fibers.'},
-    {'name': 'Thermos Leakproof Stainless Hot Water Flask', 'brand': 'Thermos', 'category': 'Home & Kitchen', 'price': 27.50, 'countInStock': 40, 'image': 'https://images.unsplash.com/photo-1619558260268-cde7e03a0152', 'description': 'Vacuum insulated leakproof drink container keeping contents hot all day.'},
-    {'name': 'Natural Bamboo Wood Salad Serving Bowl', 'brand': 'Zest', 'category': 'Home & Kitchen', 'price': 32.00, 'countInStock': 22, 'image': 'https://images.unsplash.com/photo-1594911774802-8822a707cbb3', 'description': 'Eco-friendly solid bamboo bowl equipped with matching salad tossers.'},
-    {'name': 'Instant Pot Duo 7-in-1 Pressure Cooker', 'brand': 'Instant Pot', 'category': 'Home & Kitchen', 'price': 99.95, 'countInStock': 12, 'image': 'https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7', 'description': 'Multi-use pressure cooker, slow cooker, rice cooker, and steamer.'},
-    {'name': 'Brita XL 27-Cup Clean Water Dispenser Tank', 'brand': 'Brita', 'category': 'Home & Kitchen', 'price': 38.00, 'countInStock': 25, 'image': 'https://images.unsplash.com/photo-1612148798906-8d6263595eb6', 'description': 'Large capacity dispenser reducing chlorine taste and heavy tap impurities.'},
-    {'name': 'Cuisinart 15-Piece Wooden Knife Block Set', 'brand': 'Cuisinart', 'category': 'Home & Kitchen', 'price': 110.00, 'countInStock': 8, 'image': 'https://images.unsplash.com/photo-1593617316223-93cf8cb41398', 'description': 'Superior high-carbon stainless steel blades for precision and accuracy.'},
-    {'name': 'Le Creuset Cast Iron Classic Dutch Oven', 'brand': 'Le Creuset', 'category': 'Home & Kitchen', 'price': 419.95, 'countInStock': 4, 'image': 'https://images.unsplash.com/photo-1599940824399-b87987ceb72a', 'description': 'Iconic heirloom luxury french cookware delivering even heat distribution.'},
-    {'name': 'Keurig K-Classic Single Pod Coffee Machine', 'brand': 'Keurig', 'category': 'Home & Kitchen', 'price': 139.00, 'countInStock': 16, 'image': 'https://images.unsplash.com/photo-1517088455889-bfa7402660a5', 'description': 'Brews multiple K-cup pod sizes smoothly with clear push-button menus.'},
-    {'name': 'Dyson V8 Cordless Handheld Stick Vacuum', 'brand': 'Dyson', 'category': 'Home & Kitchen', 'price': 399.00, 'countInStock': 10, 'image': 'https://images.unsplash.com/photo-1558317374-067fb5f30001', 'description': 'Powerful deep-cleaning lightweight structural carpet suction extraction.'},
-    {'name': 'Pyrex Glass Tempered Food Containers 10pc', 'brand': 'Pyrex', 'category': 'Home & Kitchen', 'price': 29.99, 'countInStock': 50, 'image': 'https://images.unsplash.com/photo-1606787366850-de6330128bfc', 'description': 'Durable tempered glass locking storage jars with airtight bpa-free lids.'},
-    {'name': 'OXO Good Grips Pop Locking Storage Canisters', 'brand': 'OXO', 'category': 'Home & Kitchen', 'price': 49.50, 'countInStock': 30, 'image': 'https://images.unsplash.com/photo-1594911774802-8822a707cbb3', 'description': 'Airtight modular counter storage canisters organizing cereal and flour.'},
-    {'name': 'Philips Airfryer XXL Premium Digital Oven', 'brand': 'Philips', 'category': 'Home & Kitchen', 'price': 249.95, 'countInStock': 6, 'image': 'https://images.unsplash.com/photo-1621972750749-0fbb1abb7736', 'description': 'Fry with little to no added oil, extracting fat from food dynamically.'},
-    {'name': 'Hotel Luxury Microfiber Queen Sleep Pillows', 'brand': 'Solace', 'category': 'Home & Kitchen', 'price': 34.00, 'countInStock': 40, 'image': 'https://images.unsplash.com/photo-1540518614846-7eded433c457', 'description': 'Dust mite resistant down-alternative hotel luxury sleeping core support.'},
+    # --- HOME & KITCHEN (5 Items) ---
+    {
+        'name': 'Nespresso Vertuo Capsule Coffee Maker', 'brand': 'Nespresso', 'category': 'Home & Kitchen', 'price': 179.00, 'countInStock': 11, 
+        'image': 'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=500',
+        'description': 'Automatic pod-based countertop machine outputting single barista-grade espresso coffee cups.'
+    },
+    {
+        'name': 'Ninja Professional 1000W Kitchen Blender', 'brand': 'Ninja', 'category': 'Home & Kitchen', 'price': 99.99, 'countInStock': 15, 
+        'image': 'https://images.unsplash.com/photo-1578643463396-0997cb5328c1?w=500',
+        'description': 'High-velocity crushing blades perfect for forging ice, vegetables, and frozen fruit smoothies.'
+    },
+    {
+        'name': 'Ceramic Matte Black Dinnerware 16pc Set', 'brand': 'StudioHome', 'category': 'Home & Kitchen', 'price': 85.00, 'countInStock': 20, 
+        'image': 'https://picsum.photos/id/102/600/500',        'description': 'Contemporary heavy stoneware round plates and bowls set finished with elegant satin dark glazes.'
+    },
+    {
+        'name': 'Teflon Non-Stick Cookware Frying Pan 12in', 'brand': 'T-fal', 'category': 'Home & Kitchen', 'price': 34.50, 'countInStock': 25, 
+        'image': 'https://picsum.photos/id/312/600/500',        'description': 'Heavy-gauge aluminum skillet pan with thermo-spot indicators for effortless daily meal cooking.'
+    },
+    {
+        'name': 'Scented Organic Lavender Soy Wax Jar Candle', 'brand': 'Ember', 'category': 'Home & Kitchen', 'price': 22.00, 'countInStock': 45, 
+        'image': 'https://images.unsplash.com/photo-1603006905003-be475563bc59?w=500',
+        'description': 'Calming lavender and warm vanilla oil blend candle poured inside a clean frosted glass jar.'
+    },
 
-    # === FITNESS (20 Unique Items) ===
-    {'name': 'Bowflex SelectTech Adjustable Dumbbells', 'brand': 'Bowflex', 'category': 'Fitness', 'price': 329.00, 'countInStock': 5, 'image': 'https://images.unsplash.com/photo-1638536532686-d610adfc8e5c', 'description': 'Smart selector dial weight lifting system replacing entire metal rows.'},
-    {'name': 'Lululemon 5mm Cushion Yoga Exercise Mat', 'brand': 'Lululemon', 'category': 'Fitness', 'price': 78.00, 'countInStock': 30, 'image': 'https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f', 'description': 'Natural rubber workout mat offering unparalleled joint support traction.'},
-    {'name': 'Speedo Weighted Cardio Speed Jump Rope', 'brand': 'Speedo', 'category': 'Fitness', 'price': 19.99, 'countInStock': 100, 'image': 'https://images.unsplash.com/photo-1546483875-5f01450a83d4', 'description': 'Smooth high-speed ball-bearing jumping cords designed for cardio.'},
-    {'name': 'Everlast Pro Style Leather Boxing Gloves', 'brand': 'Everlast', 'category': 'Fitness', 'price': 65.00, 'countInStock': 15, 'image': 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd', 'description': 'Premium synthetic training gloves contouring to fists for safety.'},
-    {'name': 'Fitbit Charge 6 Smart Activity Tracker', 'brand': 'Fitbit', 'category': 'Fitness', 'price': 159.95, 'countInStock': 14, 'image': 'https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6', 'description': 'Slim bands tracking heart metrics, step counts, and sleep qualities.'},
-    {'name': 'Deep Percussion Muscle Massage Gun', 'brand': 'Hydro', 'category': 'Fitness', 'price': 99.00, 'countInStock': 20, 'image': 'https://images.unsplash.com/photo-1632161917715-dbbe5c61ca81', 'description': 'Deep percussion vibrating nodes easing post-workout muscle fatigue.'},
-    {'name': 'Outdoor Parachute Ripstop Camping Hammock', 'brand': 'Nomad', 'category': 'Fitness', 'price': 39.50, 'countInStock': 25, 'image': 'https://images.unsplash.com/photo-1510442650500-93217e634e4c', 'description': 'Triple-stitched lightweight double hammock including tree straps.'},
-    {'name': 'Aluminum Wide Tread Grip Road Bike Pedals', 'brand': 'Velo', 'category': 'Fitness', 'price': 34.00, 'countInStock': 40, 'image': 'https://images.unsplash.com/photo-1485965120184-e220f721d03e', 'description': 'Wide sturdy structural tread frames equipped with anchor grips.'},
-    {'name': 'Collapsible Carbon Hiking Trekking Poles', 'brand': 'Stratus', 'category': 'Fitness', 'price': 72.00, 'countInStock': 12, 'image': 'https://images.unsplash.com/photo-1533240332313-0db49b459ad6', 'description': 'Shock-absorbing collapsible support sticks with comfortable cork handles.'},
-    {'name': 'Tactical Waterproof LED Headlamp', 'brand': 'VoltCharge', 'category': 'Fitness', 'price': 22.50, 'countInStock': 50, 'image': 'https://images.unsplash.com/photo-1508672019048-805c876b67e2', 'description': 'Multi-mode rechargeable forehead light for night running exploration.'},
-    {'name': 'Gatorade Insulated Squeeze Sports Bottle', 'brand': 'Gatorade', 'category': 'Fitness', 'price': 12.99, 'countInStock': 80, 'image': 'https://images.unsplash.com/photo-1602143407151-7111542de6e8', 'description': 'High-flow contour squeeze bottle equipped with secure close valves.'},
-    {'name': 'Cap Barbell Solid Cast Iron Kettlebell 25lb', 'brand': 'CAP', 'category': 'Fitness', 'price': 45.00, 'countInStock': 18, 'image': 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61', 'description': 'Heavy-duty enamel finished cast iron training kettlebell with wide handles.'},
-    {'name': 'Elastic Resistance Exercise Loop Bands Set', 'brand': 'Theraband', 'category': 'Fitness', 'price': 24.00, 'countInStock': 60, 'image': 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd', 'description': 'Five progressive elastic force pull bands built for stretching rehab.'},
-    {'name': 'ProForm Anti-Burst Structural Fitness Ball', 'brand': 'ProForm', 'category': 'Fitness', 'price': 18.50, 'countInStock': 45, 'image': 'https://images.unsplash.com/photo-1599447421416-3414500d18a5', 'description': 'Thick structural core stabilization balance dome ball with inflation pump.'},
-    {'name': 'Peloton Smart Stationary Exercise Bike', 'brand': 'Peloton', 'category': 'Fitness', 'price': 1445.00, 'countInStock': 2, 'image': 'https://images.unsplash.com/photo-1594882645126-14020914d58d', 'description': 'Immersive luxury home workout cardio cycle tracking global metrics.'},
-    {'name': 'Spalding TF-1000 Indoor Basketball', 'brand': 'Spalding', 'category': 'Fitness', 'price': 69.99, 'countInStock': 14, 'image': 'https://images.unsplash.com/photo-1519766304817-4f37bda74a27', 'description': 'Deep channel microfiber composite leather official tournament ball.'},
-    {'name': 'Wilson US Open Hardcourt Tennis Balls 3pk', 'brand': 'Wilson', 'category': 'Fitness', 'price': 9.50, 'countInStock': 200, 'image': 'https://images.unsplash.com/photo-1592709823855-d5828c2901c3', 'description': 'Premium extra-duty yellow felt cores designed for hardcourt standard sets.'},
-    {'name': 'Intex Inflatable Touring Wilderness Kayak', 'brand': 'Intex', 'category': 'Fitness', 'price': 159.00, 'countInStock': 8, 'image': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5', 'description': 'Streamlined directional heavy vinyl dual-paddles lake cruiser kit.'},
-    {'name': 'Coleman 4-Person Cabin Outdoor Camping Tent', 'brand': 'Coleman', 'category': 'Fitness', 'price': 129.99, 'countInStock': 11, 'image': 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4', 'description': 'Pre-assembled structural fiberglass poles deploying fully in 60 seconds.'},
-    {'name': 'CamelBak Classic Hydration Water Backpack', 'brand': 'CamelBak', 'category': 'Fitness', 'price': 65.00, 'countInStock': 15, 'image': 'https://images.unsplash.com/photo-1622560480605-d83c853bc5c3', 'description': 'Ergonomic light pack lined with an integrated 2-liter fluid reservoir.'},
-
-    # === OFFICE (20 Unique Items) ===
-    {'name': 'Mesh Desktop Document Tracks Racks', 'brand': 'OfficeMate', 'category': 'Office', 'price': 24.99, 'countInStock': 30, 'image': 'https://images.unsplash.com/photo-1513151233558-d860c5398176', 'description': 'Multi-tier steel document desk sorting racks organizing folders.'},
-    {'name': 'Parker IM Matt Black Fountain Pen', 'brand': 'Parker', 'category': 'Office', 'price': 38.00, 'countInStock': 45, 'image': 'https://images.unsplash.com/photo-1583485088034-697b5bc54ccd', 'description': 'Professional fine steel writing nib pen executing consistent smooth lines.'},
-    {'name': 'Moleskine Classic Hardcover Notebook Journal', 'brand': 'Moleskine', 'category': 'Office', 'price': 22.50, 'countInStock': 60, 'image': 'https://images.unsplash.com/photo-1531346878377-a5be20888e57', 'description': 'Premium thread-bound ruled notebook journal with back folder lines.'},
-    {'name': 'Architect Clamp Swing Arm Task Desk Lamp', 'brand': 'Lumina', 'category': 'Office', 'price': 45.00, 'countInStock': 18, 'image': 'https://images.unsplash.com/photo-1534349762230-e0cadf78f5db', 'description': 'Classic metal joints clamp-on desk task light reducing fatigue.'},
-    {'name': 'Dual-Sided Protective Leather Desk Pad Mat', 'brand': 'Vanguard', 'category': 'Office', 'price': 29.00, 'countInStock': 35, 'image': 'https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a', 'description': 'Large protective smooth writing mousepad layer minimizing desk friction.'},
-    {'name': 'Solid Walnut Wood Stationary Phone Dock', 'brand': 'Ember', 'category': 'Office', 'price': 42.00, 'countInStock': 20, 'image': 'https://images.unsplash.com/photo-1616531770192-6eaea74c8456', 'description': 'Beautifully carved natural hardwood stand supporting clear view angles.'},
-    {'name': 'TI-84 Plus Advanced Graphing Calculator', 'brand': 'TI', 'category': 'Office', 'price': 118.00, 'countInStock': 15, 'image': 'https://images.unsplash.com/photo-1544816155-12df9643f363', 'description': 'Industry standard graphing math calculator loaded with advanced functions.'},
-    {'name': 'Heavy Duty Kraft Cardboard Boxes 3pk Set', 'brand': 'Verdant', 'category': 'Office', 'price': 19.50, 'countInStock': 40, 'image': 'https://images.unsplash.com/photo-1505691938895-1758d7feb511', 'description': 'Sturdy modular legal document containers with secure side handles.'},
-    {'name': 'Felt Sound-Absorbing Partition Divider Shield', 'brand': 'Orbit', 'category': 'Office', 'price': 52.00, 'countInStock': 10, 'image': 'https://images.unsplash.com/photo-1531403009284-440f080d1e12', 'description': 'Freestanding acoustical desk wrap panel reducing environmental noise.'},
-    {'name': 'Metallic Spring-Loading Desktop Stapler', 'brand': 'OfficeMate', 'category': 'Office', 'price': 14.00, 'countInStock': 80, 'image': 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634', 'description': 'Anti-jam spring loading office stapler binding up to 30 sheets cleanly.'},
-    {'name': 'Sharpie Permanent Markers Fine Point 12pk', 'brand': 'Sharpie', 'category': 'Office', 'price': 11.50, 'countInStock': 90, 'image': 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634', 'description': 'Bold high-visibility permanent markers tracking on most surfaces.'},
-    {'name': 'Post-it Canary Yellow Notes 24-Pad Cube', 'brand': 'Post-it', 'category': 'Office', 'price': 18.00, 'countInStock': 100, 'image': 'https://images.unsplash.com/photo-1531346878377-a5be20888e57', 'description': 'Classic pressure-sensitive repositionable sticky note pads for reminders.'},
-    {'name': 'Bostitch Heavy Duty Steel Pencil Sharpener', 'brand': 'Bostitch', 'category': 'Office', 'price': 26.00, 'countInStock': 16, 'image': 'https://images.unsplash.com/photo-1583485088034-697b5bc54ccd', 'description': 'Vacuum suction desk mounting vintage selector dial pencil shaving gears.'},
-    {'name': 'Pure Walnut Wooden Desktop Pen Holder Cup', 'brand': 'Ember', 'category': 'Office', 'price': 22.00, 'countInStock': 30, 'image': 'https://images.unsplash.com/photo-1513151233558-d860c5398176', 'description': 'Hand-milled natural solid timber pen barrel cylinder container.'},
-    {'name': 'Safco Under-Desk Rolling Mesh Filing Cart', 'brand': 'Safco', 'category': 'Office', 'price': 64.50, 'countInStock': 12, 'image': 'https://images.unsplash.com/photo-1544816155-12df9643f363', 'description': 'Slide-out rolling steel hanging folder storage basket on casters.'},
-    {'name': 'Heavy Steel Commercial 3-Hole Paper Punch', 'brand': 'OfficeMate', 'category': 'Office', 'price': 24.00, 'countInStock': 25, 'image': 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634', 'description': 'Precision binder alignment guide punch cutting paper sheets cleanly.'},
-    {'name': 'Logitech Pro HD Desktop Webcam USB Cord', 'brand': 'Logitech', 'category': 'Office', 'price': 79.99, 'countInStock': 18, 'image': 'https://images.unsplash.com/photo-1603162591621-df5916ca1e2e', 'description': 'Full HD 1080p recording video meeting camera with integrated microphone.'},
-    {'name': 'Scotch Desktop Tape Dispenser Weighted Base', 'brand': 'Scotch', 'category': 'Office', 'price': 9.99, 'countInStock': 120, 'image': 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634', 'description': 'Heavy weight rubber padded non-skid base clear adhesive tape cutter.'},
-    {'name': 'Fellowes Cross-Cut Document Shredder Gear', 'brand': 'Fellowes', 'category': 'Office', 'price': 149.00, 'countInStock': 6, 'image': 'https://images.unsplash.com/photo-1544816155-12df9643f363', 'description': 'High-security document cross-cutting steel gears tearing paper easily.'},
-    {'name': 'Anker Dual-Port USB-C Desktop Wall Charger', 'brand': 'Anker', 'category': 'Office', 'price': 34.99, 'countInStock': 40, 'image': 'https://images.unsplash.com/photo-1622445262465-2481c4574875', 'description': 'Compact rapid delivery power brick safely distributing juice to laptop lines.'}
+    # --- FITNESS (5 Items) ---
+    {
+        'name': 'Bowflex SelectTech Adjustable Dumbbells', 'brand': 'Bowflex', 'category': 'Fitness', 'price': 329.00, 'countInStock': 5, 
+        'image': 'https://images.unsplash.com/photo-1638536532686-d610adfc8e5c?w=500',
+        'description': 'Smart selector dial weight lifting dumbbell system replacing entire rows of scattered metals.'
+    },
+    {
+        'name': 'Lululemon 5mm Cushion Yoga Exercise Mat', 'brand': 'Lululemon', 'category': 'Fitness', 'price': 78.00, 'countInStock': 30, 
+        'image': 'https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=500',
+        'description': 'Natural rubber workout yoga mat offering total structural joint safety and ground traction.'
+    },
+    {
+        'name': 'Speedo Weighted Cardio Speed Jump Rope', 'brand': 'Speedo', 'category': 'Fitness', 'price': 19.99, 'countInStock': 100, 
+        'image': 'https://picsum.photos/id/1067/600/500',
+        'description': 'Smooth high-speed ball-bearing skipping rope cords designed for quick cardio training.'
+    },
+    {
+        'name': 'Everlast Pro Style Boxing Training Gloves', 'brand': 'Everlast', 'category': 'Fitness', 'price': 65.00, 'countInStock': 15, 
+        'image': 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=500',
+        'description': 'Premium synthetic padding boxing gloves contouring to fists for absolute wrist defense.'
+    },
+    {
+        'name': 'Fitbit Charge 6 Smart Activity Tracker', 'brand': 'Fitbit', 'category': 'Fitness', 'price': 159.95, 'countInStock': 14, 
+        'image': 'https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=500',
+        'description': 'Slim bands tracking real-time pulse metrics, distance step counts, and sleep cycles.'
+    }
 ]
 
-# Generate beautiful procedural variations instead of literal word duplicates
-additional_uniques = [
-    {'name': 'Dell UltraSharp 34-inch Curved Monitor', 'brand': 'Dell', 'category': 'Electronics', 'price': 649.99, 'countInStock': 6, 'image': 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf', 'description': 'Immersive panoramic curved setup maximizing multitasking desk view rows.'},
-    {'name': 'Microsoft Surface Pro 9 Tablet Book', 'brand': 'Microsoft', 'category': 'Electronics', 'price': 999.00, 'countInStock': 9, 'image': 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0', 'description': 'Ultra-flexible 2-in-1 touch screen tracking tablet and laptop systems.'},
-    {'name': 'Logitech MX Master 3S Wireless Mouse', 'brand': 'Logitech', 'category': 'Electronics', 'price': 99.99, 'countInStock': 20, 'image': 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7', 'description': 'Ergonomic programmer focus track mouse with hyperfast scrolling wheels.'},
-    {'name': 'Ring Video Doorbell Plus Camera', 'brand': 'Ring', 'category': 'Electronics', 'price': 149.99, 'countInStock': 15, 'image': 'https://images.unsplash.com/photo-1543510473-ac2c35329a28', 'description': 'Smart security doorstep camera sending head-to-toe wide visual feeds.'},
-    {'name': 'Fitbit Versa 4 Smart Health Watch', 'brand': 'Fitbit', 'category': 'Electronics', 'price': 199.95, 'countInStock': 12, 'image': 'https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6', 'description': 'Sleek companion tracking active metrics and calorie burning maps.'},
-    
-    {'name': 'Pure Sterling Silver Diamond Ring', 'brand': 'JewelCraft', 'category': 'Accessories', 'price': 349.00, 'countInStock': 8, 'image': 'https://images.unsplash.com/photo-1605100804763-247f67b3557e', 'description': 'Timeless precious ring cut statement binding luxury wedding metals.'},
-    {'name': 'Leather Vintage Minimalist Messenger Bag', 'brand': 'Fossil', 'category': 'Accessories', 'price': 189.00, 'countInStock': 14, 'image': 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62', 'description': 'Thick oiled cowhide leather computer commuter satchel case handles.'},
-    {'name': 'Gold Hoop Statement Piercing Earrings', 'brand': 'JewelCraft', 'category': 'Accessories', 'price': 95.00, 'countInStock': 22, 'image': 'https://images.unsplash.com/photo-1635767798638-3e25273a8236', 'description': 'Thick high-shine circular looping loops enhancing standard apparel tiers.'},
-    {'name': 'Gucci Aviator Gradient Sunglasses', 'brand': 'Gucci', 'category': 'Accessories', 'price': 380.00, 'countInStock': 4, 'image': 'https://images.unsplash.com/photo-1511499767150-a48a237f0083', 'description': 'Luxury Italian design tinted gold metal framework shades.'},
-    {'name': 'Heavy Machined Titanium Money Clip', 'brand': 'Orbit', 'category': 'Accessories', 'price': 32.00, 'countInStock': 45, 'image': 'https://images.unsplash.com/photo-1627123424574-724758594e93', 'description': 'Spring loaded metallic note folder replacing standard wallet rows.'},
-
-    {'name': 'Nike Air Zoom Pegasus Runners', 'brand': 'Nike', 'category': 'Apparel', 'price': 130.00, 'countInStock': 18, 'image': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff', 'description': 'Reliable everyday running shoe built with responsive structural foams.'},
-    {'name': 'Adidas Classic Three Stripe Track Jacket', 'brand': 'Adidas', 'category': 'Apparel', 'price': 75.00, 'countInStock': 20, 'image': 'https://images.unsplash.com/photo-1556821840-3a63f95609a7', 'description': 'Retro athletic zip up sweater lined with double side seam pockets.'},
-    {'name': 'Puma Fleece Active Workout Pullover', 'brand': 'Puma', 'category': 'Apparel', 'price': 50.00, 'countInStock': 35, 'image': 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633', 'description': 'Midweight performance crew sweatshirt managing sweat lines perfectly.'},
-    {'name': 'The North Face Denali Fleece Vest', 'brand': 'The North Face', 'category': 'Apparel', 'price': 89.00, 'countInStock': 14, 'image': 'https://images.unsplash.com/photo-1606912642145-20921098522e', 'description': 'Recycled thermal wind insulation core vest snap locking safely.'},
-    {'name': 'Levis Slim Fit Stretch Denim Pants', 'brand': 'Levis', 'category': 'Apparel', 'price': 69.50, 'countInStock': 40, 'image': 'https://images.unsplash.com/photo-1542272604-787c3835535d', 'description': 'Modern adaptive flex fibers tailored into classic straight leg layouts.'},
-
-    {'name': 'NutriBullet Ultra High Speed Extractor', 'brand': 'NutriBullet', 'category': 'Home & Kitchen', 'price': 79.99, 'countInStock': 22, 'image': 'https://images.unsplash.com/photo-1578643463396-0997cb5328c1', 'description': 'Single-serve rapid nutrient blending extraction cyclone jars.'},
-    {'name': 'Stoneware Ceramic Coffee Mug 4pc Set', 'brand': 'StudioHome', 'category': 'Home & Kitchen', 'price': 28.00, 'countInStock': 50, 'image': 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd', 'description': 'Thick clay thermal drink cups glazed with textured earth elements.'},
-    {'name': 'Pre-Seasoned Cast Iron Skill 10in', 'brand': 'Lodge', 'category': 'Home & Kitchen', 'price': 24.50, 'countInStock': 30, 'image': 'https://images.unsplash.com/photo-1593617316223-93cf8cb41398', 'description': 'Heavy raw iron pan optimized for perfect steak searing and baking.'},
-    {'name': 'Gourmet Wood Block Magnetic Knife Bar', 'brand': 'Cuisinart', 'category': 'Home & Kitchen', 'price': 39.00, 'countInStock': 15, 'image': 'https://images.unsplash.com/photo-1593617316223-93cf8cb41398', 'description': 'Wall mounted solid oak organizer keeping kitchen blade sets visible.'},
-    {'name': 'Aroma Digital Cool Mist Room Humidifier', 'brand': 'PureAir', 'category': 'Home & Kitchen', 'price': 45.00, 'countInStock': 25, 'image': 'https://images.unsplash.com/photo-1519558260268-cde7e03a0152', 'description': 'Ultrasonic vapor moisture control equipped with changing night lamps.'},
-
-    {'name': 'Theraband Heavy Latex Resistance Tubing', 'brand': 'Theraband', 'category': 'Fitness', 'price': 18.00, 'countInStock': 70, 'image': 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd', 'description': 'Padded alloy handle exercise pull cords expanding muscle tone lines.'},
-    {'name': 'Everlast Reflex Speed Hitting Boxing Ball', 'brand': 'Everlast', 'category': 'Fitness', 'price': 89.00, 'countInStock': 12, 'image': 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd', 'description': 'Spring dynamic target floor structural punching dummy stand set.'},
-    {'name': 'Hydro Flask Wide Mouth Water Flask 32oz', 'brand': 'Hydro', 'category': 'Fitness', 'price': 44.95, 'countInStock': 40, 'image': 'https://images.unsplash.com/photo-1602143407151-7111542de6e8', 'description': 'Double wall insulation vacuum flask keeping drinks cold up to 24hrs.'},
-    {'name': 'Cap Barbell Solid Cast Iron Hex Dumbbell', 'brand': 'CAP', 'category': 'Fitness', 'price': 35.00, 'countInStock': 30, 'image': 'https://images.unsplash.com/photo-1638536532686-d610adfc8e5c', 'description': 'Classic heavy cast iron single weight barbell anchoring grip handles.'},
-    {'name': 'Coleman Collapsible Quad Travel Camp Chair', 'brand': 'Coleman', 'category': 'Fitness', 'price': 29.99, 'countInStock': 25, 'image': 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4', 'description': 'Heavy weave steel frame foldable outdoor seating with mesh cup slots.'},
-
-    {'name': 'Sharpie Chisel Tip Accent Highlighters 24ct', 'brand': 'Sharpie', 'category': 'Office', 'price': 14.50, 'countInStock': 80, 'image': 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634', 'description': 'Fluorescent anti-smudge tracking inks highlighting ledger page strings.'},
-    {'name': 'Post-it Notes Pastel Grid Cubes 12pk Set', 'brand': 'Post-it', 'category': 'Office', 'price': 15.99, 'countInStock': 95, 'image': 'https://images.unsplash.com/photo-1531346878377-a5be20888e57', 'description': 'Soft color grid square block sticky tabs tracing office notes.'},
-    {'name': 'Bostitch Professional Heavy Duty Desk Stapler', 'brand': 'Bostitch', 'category': 'Office', 'price': 22.00, 'countInStock': 40, 'image': 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634', 'description': 'All-metal construction leverage desktop binding desktop tool accessories.'},
-    {'name': 'Safco Wire Mesh Under-Desk Garbage Wastebasket', 'brand': 'Safco', 'category': 'Office', 'price': 16.50, 'countInStock': 50, 'image': 'https://images.unsplash.com/photo-1544816155-12df9643f363', 'description': 'Breathable round steel cross weave corporate trash canister bins.'},
-    {'name': 'Scotch Double Sided Dispenser Gift Wrapping Tape', 'brand': 'Scotch', 'category': 'Office', 'price': 12.00, 'countInStock': 110, 'image': 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634', 'description': 'No-mess clear dual adhesion securing strips linking files seamlessly.'}
-]
-
-# Merge lists together to build out exactly 100 100% unique, non-duplicated item entries
-total_catalog_dataset = premium_items + additional_uniques
-
-for item in total_catalog_dataset:
-    assigned_rating = round(random.uniform(4.2, 5.0), 1)
-    assigned_reviews = random.randint(14, 250)
+for item in premium_items:
+    assigned_rating = round(random.uniform(4.4, 5.0), 1)
+    assigned_reviews = random.randint(15, 120)
     
     Product.objects.create(
         name=item['name'],
@@ -203,4 +162,4 @@ for item in total_catalog_dataset:
         numReviews=assigned_reviews
     )
 
-print(f"Successfully populated database with exactly {len(total_catalog_dataset)} 100% unique, premium products!")
+print(f"Successfully populated database with exactly {len(premium_items)} premium products!")
