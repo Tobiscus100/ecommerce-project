@@ -2,6 +2,8 @@ from django.db import models
 
 class Product(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
+    # Add this line right here to store unique image links:
+    image = models.CharField(max_length=500, null=True, blank=True) 
     description = models.TextField(null=True, blank=True)
     brand = models.CharField(max_length=200, null=True, blank=True)
     category = models.CharField(max_length=200, null=True, blank=True)
