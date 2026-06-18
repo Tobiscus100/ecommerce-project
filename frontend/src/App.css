@@ -1,3 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+/* --- Premium E-Commerce Design Tokens --- */
+:root {
+  --primary-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  --action-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  --accent-gold: #f39c12;
+  --bg-light: #f8fafc;
+  --text-dark: #0f172a;
+  --card-border: #e2e8f0;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  background-color: var(--bg-light) !important;
+  color: var(--text-dark) !important;
+}
+
+/* --- Premium Retail Cards & UI Makeover --- */
+.card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  background: #ffffff !important;
+  border: 1px solid var(--card-border) !important;
+}
+
+.card:hover {
+  transform: translateY(-8px) !important;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.05), 0 8px 10px -6px rgb(0 0 0 / 0.05) !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* Filter Pill Buttons Styling */
+.btn-light {
+  background-color: #ffffff !important;
+  border: 1px solid var(--card-border) !important;
+  color: #64748b !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-light:hover {
+  background-color: #f1f5f9 !important;
+  color: var(--text-dark) !important;
+}
+
+.btn-dark {
+  background: var(--action-gradient) !important;
+  border: none !important;
+  box-shadow: 0 4px 6px -1px rgb(30 58 138 / 0.2) !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-dark:hover {
+  opacity: 0.95 !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Modern Select Dropdowns */
+.form-select {
+  border: 2px solid var(--card-border) !important;
+  font-weight: 500 !important;
+  color: #475569 !important;
+}
+
+.form-select:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* --- Your Original Base Workspace Classes (Maintained Intact) --- */
 .counter {
   font-size: 16px;
   padding: 5px 10px;
@@ -42,8 +111,7 @@
     z-index: 1;
     top: 34px;
     height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
+    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg) scale(1.4);
   }
 
   .vite {
@@ -51,8 +119,7 @@
     top: 107px;
     height: 26px;
     width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
+    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg) scale(0.8);
   }
 }
 
