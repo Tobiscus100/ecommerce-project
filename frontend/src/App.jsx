@@ -11,6 +11,12 @@ import ShippingScreen from "./screens/ShippingScreen";
 import PaymentScreen from "./screens/PaymentScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import OrderScreen from "./screens/OrderScreen"; // Clean import for single invoice view
+import { loadStripe } from '@stripe/stripe-js'
+import { Elements } from '@stripe/react-stripe-js'
+
+// Initialize Stripe global connection pipeline instance outside the component render cycle
+// Paste your actual pk_test_... key here from your Stripe Dashboard when ready
+const stripePromise = loadStripe("pk_test_your_publishable_key_here");
 
 function App() {
   return (
@@ -27,7 +33,17 @@ function App() {
             <Route path="/cart/:id" element={<CartScreen />} />
             <Route path="/profile" element={<ProfileScreen />} />
             <Route path="/shipping" element={<ShippingScreen />} />
-            <Route path="/payment" element={<PaymentScreen />} />
+            
+            {/* Wrapped securely inside the Stripe Elements Provider */}
+            <Route 
+              path="/payment" 
+              element={
+                <Elements stripe={stripePromise}>
+                  <PaymentScreen />
+                </Elements>
+              } 
+            />
+            
             <Route path="/placeorder" element={<PlaceOrderScreen />} />
             <Route path="/order/:id" element={<OrderScreen />} />{" "}
             {/* Dynamic Invoice View Route */}
