@@ -16,7 +16,7 @@ import { Elements } from '@stripe/react-stripe-js'
 
 // Initialize Stripe global connection pipeline instance outside the component render cycle
 // Paste your actual pk_test_... key here from your Stripe Dashboard when ready
-const stripePromise = loadStripe("pk_test_your_publishable_key_here");
+const stripePromise = loadStripe("pk_test_51OFaROHWdvWZgZ72CEInbZ0KOZVH2rCpl1ESttzH1rnyt3NQtvjHw1EirH2GsXs7QLGokOg2weBoqFp6QCrvxDb000lYS7sQth");
 
 function App() {
   return (

@@ -39,21 +39,23 @@ function PaymentScreen() {
     const submitHandler = async (e) => {
         e.preventDefault()
         
-        // Save choice to Redux state
         dispatch(savePaymentMethod(paymentMethod))
 
         if (!stripe || !elements) {
-            return // Stripe elements library has not loaded yet
+            return 
         }
 
         setIsProcessing(true)
         setErrorMessage('')
 
         try {
+            // BULLETPROOF TOKEN CHECK: Fallback safely if key is access or token
+            const token = userInfo && (userInfo.access || userInfo.token)
+
             const config = {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${userInfo.token}`,
+                    Authorization: `Bearer ${token}`,
                 },
             }
 
@@ -83,7 +85,6 @@ function PaymentScreen() {
             } else {
                 if (paymentResult.paymentIntent.status === 'succeeded') {
                     setIsProcessing(false)
-                    // 3. Success! Route user to your complete order pipeline endpoint
                     navigate('/placeorder') 
                 }
             }

@@ -1,12 +1,12 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
-# IMPORT THE CORRECT BASE SERIALIZER:
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import Product 
+# Updated to import all models cleanly:
+from .models import Product, Order, OrderItem, ShippingAddress 
 
 # =====================================================================
-# 1. PRODUCT SERIALIZER (Restored for HomeScreen / ProductScreen)
+# 1. PRODUCT SERIALIZER
 # =====================================================================
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,7 +39,6 @@ class UserSerializer(serializers.ModelSerializer):
         return name
 
 
-# FIXED: Inheriting from the correct TokenObtainPairSerializer class!
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
@@ -50,12 +49,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     def validate(self, attrs):
         data = super().validate(attrs)
-        
-        # Injects your custom fields (including 'token') into the final login response
         serializer = UserSerializerWithToken(self.user).data
         for k, v in serializer.items():
             data[k] = v
-            
         return data
 
 
@@ -69,3 +65,43 @@ class UserSerializerWithToken(UserSerializer):
     def get_token(self, obj):
         token = RefreshToken.for_user(obj)
         return str(token.access_token)
+
+
+# =====================================================================
+# 3. NEW ORDER SERIALIZERS (Fixes your compilation error)
+# =====================================================================
+class ShippingAddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShippingAddress
+        fields = '__all__'
+
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = '__all__'
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    orderItems = serializers.SerializerMethodField(read_only=True)
+    shippingAddress = serializers.SerializerMethodField(read_only=True)
+    user = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Order
+        fields = '__all__'
+
+    def get_orderItems(self, obj):
+        items = obj.orderitem_set.all()
+        return OrderItemSerializer(items, many=True).data
+
+    def get_shippingAddress(self, obj):
+        try:
+            address = ShippingAddressSerializer(obj.shippingaddress, many=False).data
+        except:
+            address = False
+        return address
+
+    def get_user(self, obj):
+        user = obj.user
+        return UserSerializer(user, many=False).data

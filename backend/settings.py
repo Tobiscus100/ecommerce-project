@@ -139,3 +139,6 @@ MEDIA_URL = '/images/'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+# Stripe Payment Gateway Keys
+STRIPE_PUBLISHABLE_KEY = "pk_test_51OFaROHWdvWZgZ72CEInbZ0KOZVH2rCpl1ESttzH1rnyt3NQtvjHw1EirH2GsXs7QLGokOg2weBoqFp6QCrvxDb000lYS7sQth" 
+STRIPE_SECRET_KEY = "sk_test_51OFaROHWdvWZgZ721bHhxnvcch2CDcVTlVvQkENzucRcYvwKeMvuWirMdx9TpE4olqCs1f8XFVIbE1uzjUahPrsB00YXFmZz7v"

@@ -1,12 +1,9 @@
 from django.urls import path
 from . import views
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-)
 
 urlpatterns = [
-    # Auth Routes
-    path('users/login/', views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # Auth Routes (Updated to use your custom MyTokenObtainPairView)
+    path('users/login/', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('users/register/', views.registerUser, name='register'),
     path('users/profile/', views.getUserProfile, name='user-profile'),
     path('users/profile/update/', views.updateUserProfile, name='user-profile-update'),
@@ -14,4 +11,8 @@ urlpatterns = [
     # Product Routes
     path('products/', views.getProducts, name="products"),
     path('products/<str:pk>/', views.getProduct, name="product"),
+
+    # Stripe Payment Routes
+    path('payment/create-intent/', views.create_payment_intent, name='payment-intent'),
+    path('orders/add/', views.addOrderItems, name='orders-add'),
 ]
