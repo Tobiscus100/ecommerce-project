@@ -14,5 +14,8 @@ urlpatterns = [
 
     # Stripe Payment Routes
     path('payment/create-intent/', views.create_payment_intent, name='payment-intent'),
+
+    # Order Routes (CRITICAL ORDER: Static strings MUST go above dynamic <str:pk> paths)
     path('orders/add/', views.addOrderItems, name='orders-add'),
+    path('orders/<str:pk>/', views.getOrderById, name="user-order"),
 ]
