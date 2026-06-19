@@ -27,19 +27,6 @@ function ProductScreen() {
     dispatch(listProductDetails(id));
   }, [dispatch, id]);
 
-  // Map high-res visual assets based on the synced database item titles
-  let productImage = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=80"; // Default fallback
-
-  if (product?.name?.includes("Headphones")) {
-    productImage = "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&auto=format&fit=crop&q=80";
-  } else if (product?.name?.includes("Watch")) {
-    productImage = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=80";
-  } else if (product?.name?.includes("Light Bar")) {
-    productImage = "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=800&auto=format&fit=crop&q=80";
-  } else if (product?.name?.includes("Pour-Over")) {
-    productImage = "https://images.unsplash.com/photo-1511920170033-f8396924c348?w=800&auto=format&fit=crop&q=80";
-  }
-
   // Handler for the Add to Cart button
   const addToCartHandler = () => {
     navigate(`/cart/${id}?qty=${qty}`);
@@ -59,7 +46,7 @@ function ProductScreen() {
           {/* Column 1: Product Image */}
           <Col md={6}>
             <Image
-              src={productImage}
+              src={product.image} // 👈 FIXED: Pulls the correct dynamic database image asset directly
               alt={product.name}
               fluid
               className="rounded shadow-sm"
