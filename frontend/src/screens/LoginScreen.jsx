@@ -3,6 +3,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Form, Button, Row, Col, Container, Card } from 'react-bootstrap'
 import axios from 'axios'
 
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://ecommerce-project-738i.onrender.com'
+
 function LoginScreen() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -29,7 +31,7 @@ function LoginScreen() {
     try {
       const config = { headers: { 'Content-Type': 'application/json' } }
       const { data } = await axios.post(
-        'http://127.0.0.1:8000/api/users/login/',
+        `${BASE_URL}/api/users/login/`,
         { username: email, password: password },
         config
       )

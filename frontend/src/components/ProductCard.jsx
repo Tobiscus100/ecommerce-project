@@ -3,6 +3,8 @@ import { Card, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { FiShoppingBag } from 'react-icons/fi'
 
+const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://ecommerce-project-738i.onrender.com'
+
 function ProductCard({ product }) {
   const [isHovered, setIsHovered] = useState(false)
   
@@ -12,8 +14,19 @@ function ProductCard({ product }) {
   const getProductImage = () => {
     if (!product.image) return 'https://via.placeholder.com/200'
     
-    if (product.image.includes('http://127.0.0.1:8000/https://') || product.image.includes('http://localhost:8000/https://')) {
-      return product.image.split('8000/')[1]
+    // Handle double URLs (e.g. backend prepended its host to an external CDN/Cloudinary URL)
+    if (product.image.includes('8000/https://') || product.image.includes('onrender.com/https://')) {
+      return product.image.split(/(?:8000|onrender\.com)\//)[1]
+    }
+
+    // Replace hardcoded local dev URLs with production backend
+    if (product.image.startsWith('http://127.0.0.1:8000') || product.image.startsWith('http://localhost:8000')) {
+      return product.image.replace(/http:\/\/(?:127\.0\.0\.1|localhost):8000/, BACKEND_URL)
+    }
+
+    // If image path is relative (e.g., /media/products/img.jpg), prepend backend domain
+    if (product.image.startsWith('/')) {
+      return `${BACKEND_URL}${product.image}`
     }
     
     return product.image

@@ -3,6 +3,9 @@ import { Row, Col, Button, Container } from 'react-bootstrap'
 import ProductCard from '../components/ProductCard'
 import axios from 'axios'
 
+// Set your live Render URL here (without a trailing slash)
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://ecommerce-project-738i.onrender.com'
+
 function HomeScreen() {
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
@@ -12,8 +15,8 @@ function HomeScreen() {
     async function fetchData() {
       try {
         const timestamp = new Date().getTime()
-        const { data: productsData } = await axios.get(`http://127.0.0.1:8000/api/products/?cb=${timestamp}`)
-        const { data: categoriesData } = await axios.get(`http://127.0.0.1:8000/api/categories/?cb=${timestamp}`)
+        const { data: productsData } = await axios.get(`${BASE_URL}/api/products/?cb=${timestamp}`)
+        const { data: categoriesData } = await axios.get(`${BASE_URL}/api/categories/?cb=${timestamp}`)
         
         setProducts(productsData || [])
         setCategories(categoriesData || [])

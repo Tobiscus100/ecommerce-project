@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Row, Col, ListGroup, Image, Button, Card, Container, Form } from 'react-bootstrap'
 import { FiMinus, FiPlus, FiTrash2, FiShoppingBag } from 'react-icons/fi'
 
+const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://ecommerce-project-738i.onrender.com'
+
 function CartScreen() {
   const navigate = useNavigate()
   const [cartItems, setCartItems] = useState([])
@@ -21,6 +23,20 @@ function CartScreen() {
   const setProductsAndCache = (updatedList) => {
     setCartItems(updatedList)
     localStorage.setItem('cartItems', JSON.stringify(updatedList))
+  }
+
+  const getItemImage = (imgSrc) => {
+    if (!imgSrc) return 'https://via.placeholder.com/200'
+    if (imgSrc.includes('8000/https://') || imgSrc.includes('onrender.com/https://')) {
+      return imgSrc.split(/(?:8000|onrender\.com)\//)[1]
+    }
+    if (imgSrc.startsWith('http://127.0.0.1:8000') || imgSrc.startsWith('http://localhost:8000')) {
+      return imgSrc.replace(/http:\/\/(?:127\.0\.0\.1|localhost):8000/, BACKEND_URL)
+    }
+    if (imgSrc.startsWith('/')) {
+      return `${BACKEND_URL}${imgSrc}`
+    }
+    return imgSrc
   }
 
   const increaseQtyHandler = (productID, currentQty, maxStock) => {
@@ -121,7 +137,13 @@ function CartScreen() {
                   <ListGroup.Item key={currentID} className="py-4 border-0 border-bottom mx-2">
                     <Row className="align-items-center g-3">
                       <Col xs={3} sm={2}>
-                        <Image src={item.image} alt={item.name} fluid rounded className="bg-body-secondary object-fit-cover" />
+                        <Image 
+                          src={getItemImage(item.image)} 
+                          alt={item.name} 
+                          fluid 
+                          rounded 
+                          className="bg-body-secondary object-fit-cover" 
+                        />
                       </Col>
                       
                       <Col xs={9} sm={4}>

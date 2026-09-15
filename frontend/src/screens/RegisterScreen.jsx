@@ -3,6 +3,8 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { Form, Button, Row, Col, Container, Card } from 'react-bootstrap'
 import axios from 'axios'
 
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://ecommerce-project-738i.onrender.com'
+
 export default function RegisterScreen() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
@@ -34,7 +36,6 @@ export default function RegisterScreen() {
       return
     }
 
-    setLoading(false)
     try {
       setLoading(true)
       const config = {
@@ -42,7 +43,7 @@ export default function RegisterScreen() {
       }
 
       const { data } = await axios.post(
-        'http://127.0.0.1:8000/api/users/register/',
+        `${BASE_URL}/api/users/register/`,
         { name, username, email, password },
         config
       )
@@ -56,7 +57,7 @@ export default function RegisterScreen() {
       setError(
         err.response && err.response.data.detail
           ? err.response.data.detail
-          : 'An unpredicted network mapping connection breakdown occurred.'
+          : 'An unpredicted network connection breakdown occurred.'
       )
     } finally {
       setLoading(false)
