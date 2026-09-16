@@ -1,3 +1,4 @@
+import os
 import stripe
 from django.conf import settings
 from django.core.mail import send_mail
@@ -93,12 +94,16 @@ def create_stripe_checkout_session(request):
                 'quantity': int(item['qty']),
             })
 
+        # Dynamically point back to the client origin (Netlify in prod, localhost in dev)
+        origin = request.headers.get('Origin')
+        frontend_url = origin if origin else os.environ.get('FRONTEND_URL', 'https://premium-shopweb.netlify.app')
+
         session_kwargs = {
             'payment_method_types': ['card'],
             'line_items': line_items,
             'mode': 'payment',
-            'success_url': "http://localhost:5173/payment-success?session_id={CHECKOUT_SESSION_ID}",
-            'cancel_url': "http://localhost:5173/cart",
+            'success_url': f"{frontend_url}/payment-success?session_id={{CHECKOUT_SESSION_ID}}",
+            'cancel_url': f"{frontend_url}/cart",
             'metadata': {
                 'user_id': user.id,
                 'username': user.username
