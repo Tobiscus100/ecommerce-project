@@ -1,11 +1,27 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from django.db.models import Q
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import Product, Category, Order, OrderItem
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
+        # Allow sign in with either username OR email
+        account_identifier = attrs.get('username')
+        
+        if account_identifier:
+            # Check if there is a matching user by email or username (case-insensitive)
+            matched_user = User.objects.filter(
+                Q(username__iexact=account_identifier) | Q(email__iexact=account_identifier)
+            ).first()
+
+            if matched_user:
+                # Reassign the actual Django username so SimpleJWT internal authentication succeeds
+                attrs['username'] = matched_user.username
+
         data = super().validate(attrs)
+
+        # Include custom user profile fields in JWT response
         data['id'] = self.user.id
         data['username'] = self.user.username
         data['email'] = self.user.email
