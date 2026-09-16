@@ -3,7 +3,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Form, Button, Row, Col, Container, Card } from 'react-bootstrap'
 import axios from 'axios'
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'https://ecommerce-project-3cq9.onrender.com'
+const rawUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const BASE_URL = rawUrl.replace(/\/+$/, '')
 
 function LoginScreen() {
   const [email, setEmail] = useState('')
@@ -14,7 +15,7 @@ function LoginScreen() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const redirect = location.search ? location.search.split('=')[1] : '/'
+  const redirect = new URLSearchParams(location.search).get('redirect') || '/'
 
   useEffect(() => {
     const userInfo = localStorage.getItem('userInfo')
@@ -32,24 +33,33 @@ function LoginScreen() {
       const config = { headers: { 'Content-Type': 'application/json' } }
       const { data } = await axios.post(
         `${BASE_URL}/api/users/login/`,
-        { username: email, password: password },
+        { username: email.trim(), password },
         config
       )
 
       const userPayload = {
         ...data,
-        username: data.username || email.split('@')[0]
+        username: data.username || email.trim().split('@')[0],
       }
 
       localStorage.setItem('userInfo', JSON.stringify(userPayload))
-      
       window.dispatchEvent(new Event('cartUpdated'))
-
       navigate(redirect)
     } catch (err) {
-      setError(err.response && err.response.data.detail
-        ? err.response.data.detail
-        : 'Invalid credentials. Please verify your email and password.')
+      const responseData = err.response && err.response.data
+      let message = 'Invalid credentials. Please verify your email and password.'
+
+      if (responseData) {
+        if (typeof responseData.detail === 'string') {
+          message = responseData.detail
+        } else if (typeof responseData === 'object') {
+          const firstKey = Object.keys(responseData)[0]
+          const firstVal = responseData[firstKey]
+          message = Array.isArray(firstVal) ? `${firstKey}: ${firstVal[0]}` : String(firstVal)
+        }
+      }
+
+      setError(message)
     } finally {
       setLoading(false)
     }
@@ -62,7 +72,7 @@ function LoginScreen() {
           <Card className="p-4 shadow-sm border-0 rounded-3">
             <Card.Body>
               <h2 className="mb-4 fw-bold text-body">Sign In</h2>
-              
+
               {error && <div className="alert alert-danger py-2 fs-7 rounded-2">{error}</div>}
 
               <Form onSubmit={submitHandler}>
@@ -90,9 +100,9 @@ function LoginScreen() {
                   />
                 </Form.Group>
 
-                <Button 
-                  type="submit" 
-                  variant="secondary" 
+                <Button
+                  type="submit"
+                  variant="secondary"
                   className="w-100 py-2 rounded-pill fw-semibold tracking-wide btn-custom"
                   disabled={loading}
                 >
@@ -103,7 +113,10 @@ function LoginScreen() {
               <Row className="py-3">
                 <Col className="fs-7 text-muted">
                   New Customer?{' '}
-                  <Link to={redirect ? `/register?redirect=${redirect}` : '/register'} className="link-secondary fw-semibold text-decoration-none">
+                  <Link
+                    to={redirect !== '/' ? `/register?redirect=${redirect}` : '/register'}
+                    className="link-secondary fw-semibold text-decoration-none"
+                  >
                     Register here
                   </Link>
                 </Col>

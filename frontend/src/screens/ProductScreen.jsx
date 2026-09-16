@@ -3,12 +3,15 @@ import { Link, useParams, useNavigate } from 'react-router-dom'
 import { Row, Col, Image, ListGroup, Card, Button, Container, Alert, Form } from 'react-bootstrap'
 import { FiArrowLeft, FiShoppingBag, FiMinus, FiPlus, FiCheckCircle } from 'react-icons/fi'
 import axios from 'axios'
+import { useCart } from '../context/CartContext'
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'https://ecommerce-project-3cq9.onrender.com'
+const rawUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const BASE_URL = rawUrl.replace(/\/+$/, '')
 
 export default function ProductScreen() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { addToCart } = useCart()
 
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -20,16 +23,22 @@ export default function ProductScreen() {
     const fetchProduct = async () => {
       try {
         setLoading(true)
-        const { data } = await axios.get(`${BASE_URL}/api/products/${id}/`)
+        const timestamp = new Date().getTime()
+        const { data } = await axios.get(`${BASE_URL}/api/products/${id}/?cb=${timestamp}`)
         setProduct(data)
         
         if (data && data.image) {
-          if (data.image.includes('8000/https://') || data.image.includes('onrender.com/https://')) {
-            setMainImage(data.image.split(/(?:8000|onrender\.com)\//)[1])
-          } else if (data.image.startsWith('http://127.0.0.1:8000') || data.image.startsWith('http://localhost:8000')) {
-            setMainImage(data.image.replace(/http:\/\/(?:127\.0\.0\.1|localhost):8000/, BASE_URL))
+          if (data.image.includes('://http://') || data.image.includes('://https://')) {
+            const splitIndex = data.image.lastIndexOf('http')
+            setMainImage(data.image.substring(splitIndex))
           } else if (data.image.startsWith('/')) {
             setMainImage(`${BASE_URL}${data.image}`)
+          } else if (data.image.includes('127.0.0.1:8000') || data.image.includes('onrender.com')) {
+            setMainImage(
+              data.image
+                .replace(/https?:\/\/127\.0\.0\.1:8000/, BASE_URL)
+                .replace(/https?:\/\/.*\.onrender\.com/, BASE_URL)
+            )
           } else {
             setMainImage(data.image)
           }
@@ -48,8 +57,10 @@ export default function ProductScreen() {
     fetchProduct()
   }, [id])
 
+  const maxStock = product && Number(product.countInStock) >= 0 ? Number(product.countInStock) : 0
+
   const increaseQty = () => {
-    if (qty < product.countInStock) setQty(prev => prev + 1)
+    if (qty < maxStock) setQty(prev => prev + 1)
   }
 
   const decreaseQty = () => {
@@ -65,51 +76,24 @@ export default function ProductScreen() {
     const parsed = parseInt(val, 10)
     if (isNaN(parsed) || parsed < 1) {
       setQty(1)
-    } else if (parsed > product.countInStock) {
-      setQty(product.countInStock)
+    } else if (parsed > maxStock) {
+      setQty(maxStock)
     } else {
       setQty(parsed)
     }
   }
 
   const handleQtyBlur = () => {
-    if (qty === '') {
+    if (qty === '' || isNaN(qty)) {
       setQty(1)
     }
   }
 
   const addToCartHandler = () => {
-    const finalQty = qty === '' ? 1 : qty
-    try {
-      const currentCart = JSON.parse(localStorage.getItem('cartItems')) || []
-      const productId = product.id || product._id
-      const itemExists = currentCart.find((item) => (item.id || item._id) === productId)
-
-      if (itemExists) {
-        currentCart.forEach((item) => {
-          if ((item.id || item._id) === productId) {
-            item.qty = Math.min(item.qty + finalQty, product.countInStock)
-          }
-        })
-      } else {
-        currentCart.push({
-          id: productId,
-          _id: productId,
-          name: product.name,
-          image: mainImage || 'https://via.placeholder.com/400',
-          price: Number(product.price),
-          countInStock: product.countInStock,
-          qty: finalQty
-        })
-      }
-
-      localStorage.setItem('cartItems', JSON.stringify(currentCart))
-      window.dispatchEvent(new Event('cartUpdated'))
-      
-      navigate('/cart')
-    } catch (err) {
-      console.error('Could not add item to cart:', err)
-    }
+    const finalQty = qty === '' || isNaN(qty) ? 1 : Number(qty)
+    addToCart(product, finalQty)
+    window.dispatchEvent(new Event('cartUpdated'))
+    navigate('/cart')
   }
 
   if (loading) {
@@ -167,13 +151,15 @@ export default function ProductScreen() {
           <Col lg={6} md={12}>
             <ListGroup variant="flush" className="bg-transparent mb-4">
               <ListGroup.Item className="border-0 bg-transparent px-0 pb-2">
-                <span className="text-uppercase text-warning tracking-wider small fw-bold fs-7">{product.category?.name || 'Premium Tier'}</span>
+                <span className="text-uppercase text-warning tracking-wider small fw-bold fs-7">
+                  {typeof product.category === 'object' ? product.category?.name : (product.category || 'Premium Tier')}
+                </span>
                 <h1 className="fw-bold text-dark tracking-tight mt-1 mb-2" style={{ fontSize: '2.5rem' }}>{product.name}</h1>
               </ListGroup.Item>
 
               <ListGroup.Item className="border-0 bg-transparent px-0 py-2">
                 <h3 className="fw-extrabold text-success font-monospace">
-                  ₦{Number(product.price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  ₦{Number(product.price || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </h3>
               </ListGroup.Item>
 
@@ -190,16 +176,16 @@ export default function ProductScreen() {
                 <Row className="mb-3 align-items-center border-bottom pb-3 g-0">
                   <Col className="text-muted small fw-semibold">Unit Value:</Col>
                   <Col className="fw-bold text-dark text-end font-monospace fs-5">
-                    ₦{Number(product.price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    ₦{Number(product.price || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </Col>
                 </Row>
 
                 <Row className="mb-4 align-items-center border-bottom pb-3 g-0">
                   <Col className="text-muted small fw-semibold">Availability Status:</Col>
                   <Col className="text-end">
-                    {product.countInStock > 0 ? (
+                    {maxStock > 0 ? (
                       <span className="d-inline-flex align-items-center gap-1.5 badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill small fw-bold">
-                        <FiCheckCircle /> Available ({product.countInStock} Units)
+                        <FiCheckCircle /> Available ({maxStock} Units)
                       </span>
                     ) : (
                       <span className="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-1.5 rounded-pill small fw-bold">
@@ -209,7 +195,7 @@ export default function ProductScreen() {
                   </Col>
                 </Row>
 
-                {product.countInStock > 0 && (
+                {maxStock > 0 && (
                   <Row className="mb-4 align-items-center g-0">
                     <Col className="text-muted small fw-semibold">Quantity Allocation:</Col>
                     <Col xs="auto">
@@ -234,7 +220,7 @@ export default function ProductScreen() {
                           variant="link"
                           className="text-dark text-decoration-none px-2 py-1 flex-grow-1 d-flex justify-content-center"
                           onClick={increaseQty}
-                          disabled={qty >= product.countInStock}
+                          disabled={qty >= maxStock}
                         >
                           <FiPlus />
                         </Button>
@@ -247,10 +233,10 @@ export default function ProductScreen() {
                   type="button"
                   variant="dark"
                   className="w-100 py-3 rounded-pill fw-bold text-uppercase tracking-wider shadow-sm mt-2 d-flex align-items-center justify-content-center gap-2 transition-all transform-hover"
-                  disabled={product.countInStock === 0}
+                  disabled={maxStock === 0}
                   onClick={addToCartHandler}
                 >
-                  <FiShoppingBag /> {product.countInStock > 0 ? 'Add To Cart Bundle' : 'Temporarily Out of Stock'}
+                  <FiShoppingBag /> {maxStock > 0 ? 'Add To Cart Bundle' : 'Temporarily Out of Stock'}
                 </Button>
               </Card.Body>
             </Card>

@@ -2,51 +2,57 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Button, Row, Col, ListGroup, Image, Card, Container } from 'react-bootstrap'
 import axios from 'axios'
+import { useCart } from '../context/CartContext'
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'https://ecommerce-project-3cq9.onrender.com'
+const rawUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const BASE_URL = rawUrl.replace(/\/+$/, '')
 
 export default function PlaceOrderScreen() {
   const navigate = useNavigate()
-  const [cartItems, setCartItems] = useState([])
+  const { cartItems } = useCart()
   const [shippingAddress, setShippingAddress] = useState({})
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem('cartItems')) || []
-    const storedAddress = JSON.parse(localStorage.getItem('shippingAddress')) || {}
     const userInfo = localStorage.getItem('userInfo')
-
     if (!userInfo) {
       navigate('/login?redirect=/placeorder')
       return
     }
 
-    if (!storedAddress.address) {
+    try {
+      const storedAddress = JSON.parse(localStorage.getItem('shippingAddress')) || {}
+      if (!storedAddress.address) {
+        navigate('/shipping')
+        return
+      }
+      setShippingAddress(storedAddress)
+    } catch {
       navigate('/shipping')
-      return
     }
-
-    setCartItems(storedCart)
-    setShippingAddress(storedAddress)
   }, [navigate])
 
   const totalItems = cartItems.reduce((acc, item) => acc + (Number(item.qty) || 0), 0)
-  const itemsPrice = cartItems.reduce((acc, item) => acc + (Number(item.qty) || 0) * item.price, 0)
+  const itemsPrice = cartItems.reduce(
+    (acc, item) => acc + (Number(item.qty) || 0) * (Number(item.price) || 0),
+    0
+  )
 
   const placeOrderHandler = async () => {
     setLoading(true)
     setError('')
+
     try {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-      const token = userInfo ? userInfo.access : null
+      const token = userInfo ? (userInfo.access || userInfo.token) : null
 
       if (!token) {
         setError('Your session has expired. Please log in again.')
         setLoading(false)
         return
       }
-      
+
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -69,11 +75,22 @@ export default function PlaceOrderScreen() {
         setError('Failed to retrieve a valid payment gateway URL.')
       }
     } catch (err) {
-      setError(
-        err.response && err.response.data.detail
-          ? err.response.data.detail
-          : 'An unexpected connection error occurred during checkout setup.'
-      )
+      const responseData = err.response && err.response.data
+      let message = 'An unexpected connection error occurred during checkout setup.'
+
+      if (responseData) {
+        if (typeof responseData.detail === 'string') {
+          message = responseData.detail
+        } else if (typeof responseData.error === 'string') {
+          message = responseData.error
+        } else if (typeof responseData === 'object') {
+          const firstKey = Object.keys(responseData)[0]
+          const firstVal = responseData[firstKey]
+          message = Array.isArray(firstVal) ? `${firstKey}: ${firstVal[0]}` : String(firstVal)
+        }
+      }
+
+      setError(message)
     } finally {
       setLoading(false)
     }
@@ -108,13 +125,19 @@ export default function PlaceOrderScreen() {
                     <ListGroup.Item key={item.id || item._id} className="px-0 py-3 border-0">
                       <Row className="align-items-center">
                         <Col md={2} xs={3}>
-                          <Image src={item.image} alt={item.name} fluid rounded className="bg-body-secondary object-fit-cover" />
+                          <Image 
+                            src={item.image} 
+                            alt={item.name} 
+                            fluid 
+                            rounded 
+                            className="bg-body-secondary object-fit-cover" 
+                          />
                         </Col>
                         <Col md={6} xs={9}>
                           <span className="fw-bold text-body">{item.name}</span>
                         </Col>
                         <Col md={4} xs={12} className="text-md-end mt-2 mt-md-0 fw-semibold text-muted font-monospace">
-                          {item.qty} x ₦{Number(item.price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} = ₦{(item.qty * item.price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          {item.qty} x ₦{Number(item.price || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} = ₦{(Number(item.qty || 0) * Number(item.price || 0)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </Col>
                       </Row>
                     </ListGroup.Item>

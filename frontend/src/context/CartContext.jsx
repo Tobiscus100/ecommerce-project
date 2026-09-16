@@ -1,18 +1,29 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://ecommerce-project-3cq9.onrender.com';
+const rawUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const BACKEND_URL = rawUrl.replace(/\/+$/, '');
 
 const normalizeProductImage = (imgSrc) => {
   if (!imgSrc) return 'https://via.placeholder.com/200';
-  if (imgSrc.includes('8000/https://') || imgSrc.includes('onrender.com/https://')) {
-    return imgSrc.split(/(?:8000|onrender\.com)\//)[1];
+
+  // Fix nested absolute URLs created by Django serializers (e.g. localhost:8000/https://...)
+  if (imgSrc.includes('://http://') || imgSrc.includes('://https://')) {
+    const splitIndex = imgSrc.lastIndexOf('http');
+    return imgSrc.substring(splitIndex);
   }
-  if (imgSrc.startsWith('http://127.0.0.1:8000') || imgSrc.startsWith('http://localhost:8000')) {
-    return imgSrc.replace(/http:\/\/(?:127\.0\.0\.1|localhost):8000/, BACKEND_URL);
-  }
+
+  // Handle local relative media paths (e.g. /media/images/phone.jpg)
   if (imgSrc.startsWith('/')) {
     return `${BACKEND_URL}${imgSrc}`;
   }
+
+  // Replace legacy hostnames if stored in local cache
+  if (imgSrc.includes('127.0.0.1:8000') || imgSrc.includes('onrender.com')) {
+    return imgSrc
+      .replace(/https?:\/\/127\.0\.0\.1:8000/, BACKEND_URL)
+      .replace(/https?:\/\/.*\.onrender\.com/, BACKEND_URL);
+  }
+
   return imgSrc;
 };
 
@@ -20,8 +31,12 @@ const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState(() => {
-    const localData = localStorage.getItem('teamtech_cart');
-    return localData ? JSON.parse(localData) : [];
+    try {
+      const localData = localStorage.getItem('teamtech_cart');
+      return localData ? JSON.parse(localData) : [];
+    } catch {
+      return [];
+    }
   });
 
   useEffect(() => {
@@ -30,7 +45,7 @@ export function CartProvider({ children }) {
 
   const addToCart = (product, qty = 1) => {
     const productId = product._id || product.id;
-    const maxStock = product.countInStock || 10;
+    const maxStock = Number(product.countInStock) > 0 ? Number(product.countInStock) : 10;
     const sanitizedImage = normalizeProductImage(product.image);
 
     setCartItems((prevItems) => {
@@ -43,6 +58,7 @@ export function CartProvider({ children }) {
             : x
         );
       }
+
       return [
         ...prevItems,
         {
@@ -50,7 +66,7 @@ export function CartProvider({ children }) {
           id: productId,
           _id: productId,
           image: sanitizedImage,
-          qty
+          qty: Math.min(qty, maxStock)
         }
       ];
     });

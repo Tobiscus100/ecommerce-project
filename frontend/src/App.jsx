@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import { Navbar, Container, Nav, NavDropdown, Badge, Button } from 'react-bootstrap'
+import { useCart } from './context/CartContext'
+
 import HomeScreen from './screens/HomeScreen'
 import LoginScreen from './screens/LoginScreen'
 import RegisterScreen from './screens/RegisterScreen'
@@ -13,37 +15,24 @@ import MyOrdersScreen from './screens/MyOrdersScreen'
 import ProductScreen from './screens/ProductScreen'
 
 function App() {
+  const { cartItems } = useCart()
   const [userInfo, setUserInfo] = useState(null)
-  const [cartCount, setCartCount] = useState(0)
   const [isDarkMode, setIsDarkMode] = useState(false)
 
-  const updateCartBadgeCount = () => {
-    try {
-      const storedCart = localStorage.getItem('cartItems')
-      if (storedCart) {
-        const items = JSON.parse(storedCart)
-        const total = items.reduce((acc, item) => acc + Number(item.qty || 0), 0)
-        setCartCount(total)
-      } else {
-        setCartCount(0)
-      }
-    } catch (error) {
-      console.error('Error tracking cart updates:', error)
-    }
-  }
+  // Derive cart total directly from active context state in memory
+  const cartCount = (cartItems || []).reduce((acc, item) => acc + (Number(item.qty) || 0), 0)
 
-  const syncUserSession = () => {
-    const storedUser = localStorage.getItem('userInfo')
-    if (storedUser) {
-      setUserInfo(JSON.parse(storedUser))
-    } else {
+  const syncUserSession = useCallback(() => {
+    try {
+      const storedUser = localStorage.getItem('userInfo')
+      setUserInfo(storedUser ? JSON.parse(storedUser) : null)
+    } catch {
       setUserInfo(null)
     }
-  }
+  }, [])
 
   useEffect(() => {
     syncUserSession()
-    updateCartBadgeCount()
 
     const savedTheme = localStorage.getItem('theme')
     if (savedTheme === 'dark') {
@@ -51,15 +40,18 @@ function App() {
       setIsDarkMode(true)
     } else {
       document.documentElement.setAttribute('data-bs-theme', 'light')
+      setIsDarkMode(false)
     }
 
-    window.addEventListener('cartUpdated', () => {
-      updateCartBadgeCount()
-      syncUserSession()
-    })
-    
-    return () => window.removeEventListener('cartUpdated', updateCartBadgeCount)
-  }, [])
+    const handleSync = () => syncUserSession()
+    window.addEventListener('storage', handleSync)
+    window.addEventListener('cartUpdated', handleSync)
+
+    return () => {
+      window.removeEventListener('storage', handleSync)
+      window.removeEventListener('cartUpdated', handleSync)
+    }
+  }, [syncUserSession])
 
   const toggleThemeHandler = () => {
     if (isDarkMode) {
@@ -76,6 +68,7 @@ function App() {
   const logoutHandler = () => {
     localStorage.removeItem('userInfo')
     setUserInfo(null)
+    window.dispatchEvent(new Event('cartUpdated'))
     window.location.href = '/login'
   }
 

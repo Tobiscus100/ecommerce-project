@@ -1,27 +1,44 @@
 import React, { useState, useEffect } from 'react'
-import { Row, Col, Button, Container } from 'react-bootstrap'
+import { Row, Col, Button, Container, Spinner } from 'react-bootstrap'
 import ProductCard from '../components/ProductCard'
 import axios from 'axios'
 
-// Updated to your active Render backend instance
-const BASE_URL = import.meta.env.VITE_API_URL || 'https://ecommerce-project-3cq9.onrender.com'
+const rawUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const BASE_URL = rawUrl.replace(/\/+$/, '')
 
 function HomeScreen() {
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
   const [activeCategory, setActiveCategory] = useState('All')
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchData() {
       try {
+        setLoading(true)
         const timestamp = new Date().getTime()
-        const { data: productsData } = await axios.get(`${BASE_URL}/api/products/?cb=${timestamp}`)
-        const { data: categoriesData } = await axios.get(`${BASE_URL}/api/categories/?cb=${timestamp}`)
         
-        setProducts(productsData || [])
-        setCategories(categoriesData || [])
+        const [productsRes, categoriesRes] = await Promise.allSettled([
+          axios.get(`${BASE_URL}/api/products/?cb=${timestamp}`),
+          axios.get(`${BASE_URL}/api/categories/?cb=${timestamp}`)
+        ])
+
+        if (productsRes.status === 'fulfilled') {
+          setProducts(Array.isArray(productsRes.value.data) ? productsRes.value.data : [])
+        } else {
+          console.error('Error fetching products:', productsRes.reason)
+          setProducts([])
+        }
+
+        if (categoriesRes.status === 'fulfilled') {
+          setCategories(Array.isArray(categoriesRes.value.data) ? categoriesRes.value.data : [])
+        } else {
+          setCategories([])
+        }
       } catch (error) {
         console.error('Error fetching catalog data from Django:', error)
+      } finally {
+        setLoading(false)
       }
     }
     fetchData()
@@ -29,7 +46,20 @@ function HomeScreen() {
 
   const filteredProducts = activeCategory === 'All'
     ? products
-    : products.filter(p => p.category?.name === activeCategory)
+    : products.filter(p => {
+        if (!p.category) return false
+        
+        // Handle object format: { name: 'Electronics', slug: 'electronics' }
+        if (typeof p.category === 'object') {
+          return (
+            p.category.name?.toLowerCase() === activeCategory.toLowerCase() ||
+            p.category.slug?.toLowerCase() === activeCategory.toLowerCase()
+          )
+        }
+        
+        // Handle string format: 'Electronics'
+        return String(p.category).trim().toLowerCase() === activeCategory.trim().toLowerCase()
+      })
 
   return (
     <Container className="py-4">
@@ -44,27 +74,37 @@ function HomeScreen() {
           All Items
         </Button>
         
-        {categories.map((cat) => (
-          <Button
-            key={cat.slug || cat.name}
-            variant={activeCategory === cat.name ? 'secondary' : 'outline-secondary'}
-            className="rounded-pill px-4 btn-sm tracking-wide text-capitalize transition-all"
-            onClick={() => setActiveCategory(cat.name)}
-          >
-            {cat.name}
-          </Button>
-        ))}
+        {categories.map((cat, idx) => {
+          const catName = typeof cat === 'object' ? (cat.name || cat.slug) : cat
+          const catKey = typeof cat === 'object' ? (cat.slug || cat.name || idx) : `${cat}_${idx}`
+          const isSelected = activeCategory.toLowerCase() === String(catName).toLowerCase()
+
+          return (
+            <Button
+              key={catKey}
+              variant={isSelected ? 'secondary' : 'outline-secondary'}
+              className="rounded-pill px-4 btn-sm tracking-wide text-capitalize transition-all"
+              onClick={() => setActiveCategory(catName)}
+            >
+              {catName}
+            </Button>
+          )
+        })}
       </div>
 
       <div key={activeCategory} className="fade-in-up">
-        {filteredProducts.length === 0 ? (
+        {loading ? (
+          <div className="text-center py-5">
+            <Spinner animation="border" variant="secondary" />
+          </div>
+        ) : filteredProducts.length === 0 ? (
           <div className="alert alert-secondary text-center py-5 border rounded-3">
             <p className="text-muted mb-0">No premium products found in this category right now.</p>
           </div>
         ) : (
           <Row>
             {filteredProducts.map((product) => (
-              <Col key={product.id} sm={12} md={6} lg={4} xl={3} className="mb-4">
+              <Col key={product._id || product.id} sm={12} md={6} lg={4} xl={3} className="mb-4">
                 <ProductCard product={product} />
               </Col>
             ))}

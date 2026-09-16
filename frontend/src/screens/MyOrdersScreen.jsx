@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { Table, Container, Spinner, Alert } from 'react-bootstrap'
 import axios from 'axios'
 
+const rawUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const BASE_URL = rawUrl.replace(/\/+$/, '')
+
 export default function MyOrdersScreen() {
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
@@ -11,7 +14,7 @@ export default function MyOrdersScreen() {
     const fetchOrders = async () => {
       try {
         const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-        const token = userInfo ? userInfo.access : null
+        const token = userInfo ? (userInfo.access || userInfo.token) : null
 
         if (!token) {
           setError('Please sign in to view your order logs.')
@@ -25,8 +28,8 @@ export default function MyOrdersScreen() {
           },
         }
 
-        const { data } = await axios.get('http://127.0.0.1:8000/api/orders/my-orders/', config)
-        setOrders(data)
+        const { data } = await axios.get(`${BASE_URL}/api/orders/my-orders/`, config)
+        setOrders(Array.isArray(data) ? data : [])
       } catch (err) {
         setError(err.response && err.response.data.detail ? err.response.data.detail : 'Could not pull transaction profiles.')
       } finally {
@@ -56,6 +59,12 @@ export default function MyOrdersScreen() {
     return 'N/A'
   }
 
+  const formatPrice = (priceVal) => {
+    const cleaned = String(priceVal || 0).replace('₦', '').replace(/,/g, '').trim()
+    const numeric = Number(cleaned) || 0
+    return numeric.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+  }
+
   return (
     <Container className="py-5">
       <h2 className="fw-bold text-body mb-4">My Order History</h2>
@@ -81,20 +90,20 @@ export default function MyOrdersScreen() {
               </tr>
             </thead>
             <tbody>
-              {orders.map((order) => {
-                const orderId = order._id || order.id
+              {orders.map((order, idx) => {
+                const orderId = order._id || order.id || idx
 
                 return (
                   <tr key={orderId}>
                     <td className="font-monospace fw-bold text-secondary">#{orderId}</td>
-                    <td>{order.createdAt}</td>
+                    <td>{order.createdAt || 'N/A'}</td>
                     <td className="fw-bold text-success font-monospace">
-                      ₦{Number(order.totalPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      ₦{formatPrice(order.totalPrice)}
                     </td>
                     <td>
                       {order.isPaid ? (
                         <span className="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 rounded-pill">
-                          Paid ({order.paidAt})
+                          Paid {order.paidAt && order.paidAt !== 'N/A' ? `(${order.paidAt})` : ''}
                         </span>
                       ) : (
                         <span className="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1 rounded-pill">

@@ -2,11 +2,16 @@ import React, { useEffect, useState, useRef } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { Container, Card, Button } from 'react-bootstrap'
 import axios from 'axios'
+import { useCart } from '../context/CartContext'
+
+const rawUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const BASE_URL = rawUrl.replace(/\/+$/, '')
 
 export default function PaymentSuccessScreen() {
   const [searchParams] = useSearchParams()
   const sessionId = searchParams.get('session_id')
   const [mailStatus, setMailStatus] = useState('Processing post-payment registration...')
+  const { clearCart } = useCart()
   
   const hasProcessed = useRef(false)
 
@@ -15,13 +20,22 @@ export default function PaymentSuccessScreen() {
     
     const processPostPaymentWorkflow = async () => {
       try {
-        const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-        const storedCart = JSON.parse(localStorage.getItem('cartItems')) || []
+        let userInfo = null
+        try {
+          userInfo = JSON.parse(localStorage.getItem('userInfo'))
+        } catch {
+          userInfo = null
+        }
+
+        const storedCart = JSON.parse(localStorage.getItem('teamtech_cart')) || JSON.parse(localStorage.getItem('cartItems')) || []
         const storedAddress = JSON.parse(localStorage.getItem('shippingAddress')) || {}
         
-        const token = userInfo ? userInfo.access : null
+        const token = userInfo ? (userInfo.access || userInfo.token) : null
         if (!token || storedCart.length === 0) {
-          setMailStatus('No pending transaction cart items found to process.')
+          setMailStatus('Order completed! Your cart has been safely cleared.')
+          clearCart()
+          localStorage.removeItem('teamtech_cart')
+          localStorage.removeItem('cartItems')
           return
         }
 
@@ -34,13 +48,13 @@ export default function PaymentSuccessScreen() {
           },
         }
 
-        const itemsPrice = storedCart.reduce((acc, item) => acc + (Number(item.qty) || 0) * item.price, 0)
-        const formattedPrice = itemsPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+        const itemsPrice = storedCart.reduce((acc, item) => acc + (Number(item.qty) || 0) * (Number(item.price) || 0), 0)
+        const formattedPrice = itemsPrice.toFixed(2)
 
         setMailStatus('Securing database entry order logs and dispatching invoices...')
         
         await axios.post(
-          'http://127.0.0.1:8000/api/orders/save-order/',
+          `${BASE_URL}/api/orders/save-order/`,
           { 
             cartItems: storedCart,
             totalPrice: formattedPrice,
@@ -53,16 +67,17 @@ export default function PaymentSuccessScreen() {
         setMailStatus('Order pinned securely and receipt dispatched successfully! ✉️')
       } catch (err) {
         console.error('Checkout workflow failure:', err)
-        hasProcessed.current = false
-        setMailStatus('Order logged successfully. Receipt queued for automated distribution.')
+        setMailStatus('Order registered. Confirmation receipt will be distributed to your account email.')
       } finally {
+        clearCart()
+        localStorage.removeItem('teamtech_cart')
         localStorage.removeItem('cartItems')
         window.dispatchEvent(new Event('cartUpdated'))
       }
     }
 
     processPostPaymentWorkflow()
-  }, [sessionId])
+  }, [sessionId, clearCart])
 
   return (
     <Container className="py-5 d-flex justify-content-center align-items-center" style={{ minHeight: '70vh' }}>
@@ -89,11 +104,18 @@ export default function PaymentSuccessScreen() {
             )}
           </div>
 
-          <Link to="/">
-            <Button variant="outline-secondary" className="rounded-pill px-4 py-2 fw-bold text-uppercase tracking-wider btn-sm">
-              Continue Shopping
-            </Button>
-          </Link>
+          <div className="d-flex justify-content-center gap-3">
+            <Link to="/my-orders">
+              <Button variant="secondary" className="rounded-pill px-4 py-2 fw-bold text-uppercase tracking-wider btn-sm">
+                View Orders
+              </Button>
+            </Link>
+            <Link to="/">
+              <Button variant="outline-secondary" className="rounded-pill px-4 py-2 fw-bold text-uppercase tracking-wider btn-sm">
+                Continue Shopping
+              </Button>
+            </Link>
+          </div>
         </Card.Body>
       </Card>
     </Container>

@@ -3,18 +3,19 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { Form, Button, Row, Col, Container, Card } from 'react-bootstrap'
 import axios from 'axios'
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'https://ecommerce-project-3cq9.onrender.com'
+const rawUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const BASE_URL = rawUrl.replace(/\/+$/, '')
 
 export default function RegisterScreen() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  
+
   const [name, setName] = useState('')
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  
+
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -39,7 +40,7 @@ export default function RegisterScreen() {
     try {
       setLoading(true)
       const config = {
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       }
 
       const { data } = await axios.post(
@@ -49,16 +50,23 @@ export default function RegisterScreen() {
       )
 
       localStorage.setItem('userInfo', JSON.stringify(data))
-      
       window.dispatchEvent(new Event('cartUpdated'))
-      
       navigate(redirect)
     } catch (err) {
-      setError(
-        err.response && err.response.data.detail
-          ? err.response.data.detail
-          : 'An unpredicted network connection breakdown occurred.'
-      )
+      const responseData = err.response && err.response.data
+      let message = 'An unexpected network connection breakdown occurred.'
+
+      if (responseData) {
+        if (typeof responseData.detail === 'string') {
+          message = responseData.detail
+        } else if (typeof responseData === 'object') {
+          const firstKey = Object.keys(responseData)[0]
+          const firstVal = responseData[firstKey]
+          message = Array.isArray(firstVal) ? `${firstKey}: ${firstVal[0]}` : String(firstVal)
+        }
+      }
+
+      setError(message)
     } finally {
       setLoading(false)
     }
@@ -146,7 +154,10 @@ export default function RegisterScreen() {
           <Row className="pt-2 text-center">
             <Col className="small text-muted">
               Have an account already?{' '}
-              <Link to={redirect !== '/' ? `/login?redirect=${redirect}` : '/login'} className="link-secondary fw-bold text-decoration-none border-bottom border-secondary-subtle">
+              <Link
+                to={redirect !== '/' ? `/login?redirect=${redirect}` : '/login'}
+                className="link-secondary fw-bold text-decoration-none border-bottom border-secondary-subtle"
+              >
                 Login
               </Link>
             </Col>

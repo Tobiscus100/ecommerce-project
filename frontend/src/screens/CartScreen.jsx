@@ -1,105 +1,82 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Row, Col, ListGroup, Image, Button, Card, Container, Form } from 'react-bootstrap'
 import { FiMinus, FiPlus, FiTrash2, FiShoppingBag } from 'react-icons/fi'
+import { useCart } from '../context/CartContext'
 
-const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://ecommerce-project-3cq9.onrender.com'
+const rawUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const BACKEND_URL = rawUrl.replace(/\/+$/, '')
 
 function CartScreen() {
   const navigate = useNavigate()
-  const [cartItems, setCartItems] = useState([])
-
-  useEffect(() => {
-    try {
-      const storedCart = localStorage.getItem('cartItems')
-      if (storedCart) {
-        setCartItems(JSON.parse(storedCart))
-      }
-    } catch (error) {
-      console.error('Error reading cart local storage payload:', error)
-    }
-  }, [])
-
-  const setProductsAndCache = (updatedList) => {
-    setCartItems(updatedList)
-    localStorage.setItem('cartItems', JSON.stringify(updatedList))
-  }
+  const { cartItems, addToCart, removeFromCart } = useCart()
 
   const getItemImage = (imgSrc) => {
     if (!imgSrc) return 'https://via.placeholder.com/200'
-    if (imgSrc.includes('8000/https://') || imgSrc.includes('onrender.com/https://')) {
-      return imgSrc.split(/(?:8000|onrender\.com)\//)[1]
+
+    if (imgSrc.includes('://http://') || imgSrc.includes('://https://')) {
+      const splitIndex = imgSrc.lastIndexOf('http')
+      return imgSrc.substring(splitIndex)
     }
-    if (imgSrc.startsWith('http://127.0.0.1:8000') || imgSrc.startsWith('http://localhost:8000')) {
-      return imgSrc.replace(/http:\/\/(?:127\.0\.0\.1|localhost):8000/, BACKEND_URL)
-    }
+
     if (imgSrc.startsWith('/')) {
       return `${BACKEND_URL}${imgSrc}`
     }
+
+    if (imgSrc.includes('127.0.0.1:8000') || imgSrc.includes('onrender.com')) {
+      return imgSrc
+        .replace(/https?:\/\/127\.0\.0\.1:8000/, BACKEND_URL)
+        .replace(/https?:\/\/.*\.onrender\.com/, BACKEND_URL)
+    }
+
     return imgSrc
   }
 
-  const increaseQtyHandler = (productID, currentQty, maxStock) => {
-    const limit = maxStock || 10
-    const parsedQty = currentQty === '' ? 0 : Number(currentQty)
-    if (parsedQty >= limit) return 
-    
-    const updatedCart = cartItems.map((item) =>
-      (item.id === productID || item._id === productID) ? { ...item, qty: parsedQty + 1 } : item
-    )
-    setProductsAndCache(updatedCart)
+  const increaseQtyHandler = (item) => {
+    const maxStock = Number(item.countInStock) >= 0 ? Number(item.countInStock) : 10
+    const currentQty = Number(item.qty) || 0
+    if (currentQty >= maxStock) return
+    addToCart(item, 1)
     window.dispatchEvent(new Event('cartUpdated'))
   }
 
-  const decreaseQtyHandler = (productID, currentQty) => {
-    const parsedQty = currentQty === '' ? 2 : Number(currentQty)
-    if (parsedQty <= 1) return 
-    
-    const updatedCart = cartItems.map((item) =>
-      (item.id === productID || item._id === productID) ? { ...item, qty: parsedQty - 1 } : item
-    )
-    setProductsAndCache(updatedCart)
+  const decreaseQtyHandler = (item) => {
+    const currentQty = Number(item.qty) || 1
+    if (currentQty <= 1) return
+    addToCart(item, -1)
     window.dispatchEvent(new Event('cartUpdated'))
   }
 
-  const handleQtyChangeHandler = (productID, val, maxStock) => {
-    const limit = maxStock || 10
-    
+  const handleQtyChangeHandler = (item, val) => {
+    const maxStock = Number(item.countInStock) >= 0 ? Number(item.countInStock) : 10
+
     if (val === '') {
-      const updatedCart = cartItems.map((item) =>
-        (item.id === productID || item._id === productID) ? { ...item, qty: '' } : item
-      )
-      setProductsAndCache(updatedCart)
+      addToCart({ ...item, qty: '' }, 0)
       return
     }
 
     const parsed = parseInt(val, 10)
-    let finalQty = parsed
-
     if (isNaN(parsed) || parsed < 1) {
-      finalQty = 1
-    } else if (parsed > limit) {
-      finalQty = limit
+      addToCart({ ...item, qty: 1 }, 0)
+    } else if (parsed > maxStock) {
+      addToCart({ ...item, qty: maxStock }, 0)
+    } else {
+      const currentQty = Number(item.qty) || 0
+      addToCart(item, parsed - currentQty)
     }
-
-    const updatedCart = cartItems.map((item) =>
-      (item.id === productID || item._id === productID) ? { ...item, qty: finalQty } : item
-    )
-    setProductsAndCache(updatedCart)
     window.dispatchEvent(new Event('cartUpdated'))
   }
 
-  const handleQtyBlurHandler = (productID) => {
-    const updatedCart = cartItems.map((item) =>
-      (item.id === productID || item._id === productID) && item.qty === '' ? { ...item, qty: 1 } : item
-    )
-    setProductsAndCache(updatedCart)
-    window.dispatchEvent(new Event('cartUpdated'))
+  const handleQtyBlurHandler = (item) => {
+    if (item.qty === '' || isNaN(Number(item.qty))) {
+      const currentQty = Number(item.qty) || 0
+      addToCart(item, 1 - currentQty)
+      window.dispatchEvent(new Event('cartUpdated'))
+    }
   }
 
-  const removeFromCartHandler = (id) => {
-    const updatedCart = cartItems.filter((item) => item.id !== id && item._id !== id)
-    setProductsAndCache(updatedCart)
+  const removeItemHandler = (id) => {
+    removeFromCart(id)
     window.dispatchEvent(new Event('cartUpdated'))
   }
 
@@ -112,8 +89,11 @@ function CartScreen() {
     }
   }
 
-  const totalItems = cartItems.reduce((acc, item) => acc + (item.qty === '' ? 1 : Number(item.qty) || 0), 0)
-  const rawTotalPrice = cartItems.reduce((acc, item) => acc + (item.qty === '' ? 1 : Number(item.qty) || 0) * item.price, 0)
+  const totalItems = cartItems.reduce((acc, item) => acc + (Number(item.qty) || 0), 0)
+  const rawTotalPrice = cartItems.reduce(
+    (acc, item) => acc + (Number(item.qty) || 0) * (Number(item.price) || 0),
+    0
+  )
 
   return (
     <Container className="py-5">
@@ -130,8 +110,8 @@ function CartScreen() {
           <Col lg={8}>
             <ListGroup variant="flush" className="rounded-3 shadow-sm p-2">
               {cartItems.map((item, index) => {
-                const currentID = item.id || item._id || index 
-                const maxStock = item.countInStock || 10
+                const currentID = item._id || item.id || index
+                const maxStock = Number(item.countInStock) >= 0 ? Number(item.countInStock) : 10
 
                 return (
                   <ListGroup.Item key={currentID} className="py-4 border-0 border-bottom mx-2">
@@ -145,18 +125,18 @@ function CartScreen() {
                           className="bg-body-secondary object-fit-cover" 
                         />
                       </Col>
-                      
+
                       <Col xs={9} sm={4}>
                         <Link to={`/product/${currentID}`} className="text-body fw-bold text-decoration-none d-block text-truncate fs-6">
                           {item.name}
                         </Link>
                         <span className="text-success small fw-semibold">
-                          {item.countInStock > 0 ? 'In Stock' : 'Limited Supply'}
+                          {maxStock > 0 ? 'In Stock' : 'Limited Supply'}
                         </span>
                       </Col>
 
                       <Col xs={4} sm={2} className="fw-bold text-secondary fs-6 font-monospace">
-                        ₦{Number(item.price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        ₦{Number(item.price || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </Col>
 
                       <Col xs={5} sm={3}>
@@ -165,8 +145,8 @@ function CartScreen() {
                             variant="link"
                             size="sm"
                             className="text-body text-decoration-none px-2 py-1 d-flex align-items-center justify-content-center"
-                            onClick={() => decreaseQtyHandler(currentID, item.qty)}
-                            disabled={Number(item.qty) <= 1 || item.qty === ''}
+                            onClick={() => decreaseQtyHandler(item)}
+                            disabled={Number(item.qty) <= 1}
                           >
                             <FiMinus size={14} />
                           </Button>
@@ -174,8 +154,8 @@ function CartScreen() {
                           <Form.Control
                             type="text"
                             value={item.qty}
-                            onChange={(e) => handleQtyChangeHandler(currentID, e.target.value, maxStock)}
-                            onBlur={() => handleQtyBlurHandler(currentID)}
+                            onChange={(e) => handleQtyChangeHandler(item, e.target.value)}
+                            onBlur={() => handleQtyBlurHandler(item)}
                             className="text-center bg-transparent border-0 p-0 fw-bold font-monospace text-body focus-none"
                             style={{ width: '35px', boxShadow: 'none', fontSize: '0.95rem' }}
                           />
@@ -184,8 +164,8 @@ function CartScreen() {
                             variant="link"
                             size="sm"
                             className="text-body text-decoration-none px-2 py-1 d-flex align-items-center justify-content-center"
-                            onClick={() => increaseQtyHandler(currentID, item.qty, maxStock)}
-                            disabled={Number(item.qty) >= maxStock || item.qty === ''}
+                            onClick={() => increaseQtyHandler(item)}
+                            disabled={Number(item.qty) >= maxStock}
                           >
                             <FiPlus size={14} />
                           </Button>
@@ -198,7 +178,7 @@ function CartScreen() {
                           variant="outline-danger"
                           size="sm"
                           className="rounded-circle border-0 p-2 d-inline-flex align-items-center justify-content-center"
-                          onClick={() => removeFromCartHandler(currentID)}
+                          onClick={() => removeItemHandler(currentID)}
                         >
                           <FiTrash2 size={16} />
                         </Button>

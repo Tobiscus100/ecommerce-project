@@ -5,43 +5,52 @@ import { Form, Button, Container, Card, Row, Col } from 'react-bootstrap'
 function ShippingScreen() {
   const navigate = useNavigate()
 
-  // Determine current active user ID to namespace storage keys per account
-  const currentUser = JSON.parse(localStorage.getItem('userInfo')) || null
-  const userId = currentUser ? (currentUser.id || currentUser._id || currentUser.email) : 'guest'
+  let currentUser = null
+  try {
+    currentUser = JSON.parse(localStorage.getItem('userInfo'))
+  } catch {
+    currentUser = null
+  }
 
+  const userId = currentUser ? (currentUser.id || currentUser._id || currentUser.email) : 'guest'
   const userShippingKey = `shippingAddress_${userId}`
   const userDefaultKey = `defaultShippingAddress_${userId}`
 
-  const defaultSavedAddress = JSON.parse(localStorage.getItem(userDefaultKey)) || null
-  const currentOrderAddress = JSON.parse(localStorage.getItem(userShippingKey)) || {}
-
-  const [useDefault, setUseDefault] = useState(false)
   const [address, setAddress] = useState('')
   const [city, setCity] = useState('')
   const [postalCode, setPostalCode] = useState('')
   const [country, setCountry] = useState('')
+  const [useDefault, setUseDefault] = useState(false)
   const [saveAsDefault, setSaveAsDefault] = useState(false)
+  const [defaultSavedAddress, setDefaultSavedAddress] = useState(null)
 
   useEffect(() => {
-    const userInfo = localStorage.getItem('userInfo')
-    if (!userInfo) {
+    if (!currentUser) {
       navigate('/login?redirect=/shipping')
       return
     }
 
-    if (defaultSavedAddress && Object.keys(defaultSavedAddress).length > 0) {
-      setUseDefault(true)
-      setAddress(defaultSavedAddress.address || '')
-      setCity(defaultSavedAddress.city || '')
-      setPostalCode(defaultSavedAddress.postalCode || '')
-      setCountry(defaultSavedAddress.country || '')
-    } else if (currentOrderAddress && Object.keys(currentOrderAddress).length > 0) {
-      setAddress(currentOrderAddress.address || '')
-      setCity(currentOrderAddress.city || '')
-      setPostalCode(currentOrderAddress.postalCode || '')
-      setCountry(currentOrderAddress.country || '')
+    try {
+      const savedDefault = JSON.parse(localStorage.getItem(userDefaultKey))
+      const currentOrder = JSON.parse(localStorage.getItem(userShippingKey)) || JSON.parse(localStorage.getItem('shippingAddress'))
+
+      if (savedDefault && Object.keys(savedDefault).length > 0 && savedDefault.address) {
+        setDefaultSavedAddress(savedDefault)
+        setUseDefault(true)
+        setAddress(savedDefault.address || '')
+        setCity(savedDefault.city || '')
+        setPostalCode(savedDefault.postalCode || '')
+        setCountry(savedDefault.country || '')
+      } else if (currentOrder && Object.keys(currentOrder).length > 0) {
+        setAddress(currentOrder.address || '')
+        setCity(currentOrder.city || '')
+        setPostalCode(currentOrder.postalCode || '')
+        setCountry(currentOrder.country || '')
+      }
+    } catch {
+      // Fallback cleanly on unreadable cached state
     }
-  }, [navigate])
+  }, [navigate, userDefaultKey, userShippingKey])
 
   const handleToggleDefault = (e) => {
     const checked = e.target.checked
@@ -62,17 +71,21 @@ function ShippingScreen() {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    
-    const shippingData = { address, city, postalCode, country }
 
-    // Save for both active order key and global fallback
+    const shippingData = {
+      address: address.trim(),
+      city: city.trim(),
+      postalCode: postalCode.trim(),
+      country: country.trim(),
+    }
+
     localStorage.setItem('shippingAddress', JSON.stringify(shippingData))
     localStorage.setItem(userShippingKey, JSON.stringify(shippingData))
-    
+
     if (saveAsDefault || useDefault) {
       localStorage.setItem(userDefaultKey, JSON.stringify(shippingData))
     }
-    
+
     navigate('/placeorder')
   }
 
@@ -107,7 +120,7 @@ function ShippingScreen() {
                   )}
                 </div>
               )}
-              
+
               <Form onSubmit={submitHandler}>
                 <Form.Group className="mb-3" controlId="address">
                   <Form.Label className="text-muted small fw-medium">Street Address</Form.Label>

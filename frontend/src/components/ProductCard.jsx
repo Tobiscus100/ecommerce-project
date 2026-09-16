@@ -2,65 +2,45 @@ import React, { useState } from 'react'
 import { Card, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { FiShoppingBag } from 'react-icons/fi'
+import { useCart } from '../context/CartContext'
 
-const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://ecommerce-project-3cq9.onrender.com'
+const rawUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const BACKEND_URL = rawUrl.replace(/\/+$/, '')
 
 function ProductCard({ product }) {
   const [isHovered, setIsHovered] = useState(false)
+  const { addToCart } = useCart()
   
-  const maxStock = product.countInStock || 5
-  const productId = product.id || product._id
+  const productId = product._id || product.id
+  const maxStock = Number(product.countInStock) >= 0 ? Number(product.countInStock) : 5
 
   const getProductImage = () => {
     if (!product.image) return 'https://via.placeholder.com/200'
     
-    // Handle double URLs (e.g. backend prepended its host to an external CDN/Cloudinary URL)
-    if (product.image.includes('8000/https://') || product.image.includes('onrender.com/https://')) {
-      return product.image.split(/(?:8000|onrender\.com)\//)[1]
+    // Fix nested protocol urls
+    if (product.image.includes('://http://') || product.image.includes('://https://')) {
+      const splitIndex = product.image.lastIndexOf('http')
+      return product.image.substring(splitIndex)
     }
 
-    // Replace hardcoded local dev URLs with production backend
-    if (product.image.startsWith('http://127.0.0.1:8000') || product.image.startsWith('http://localhost:8000')) {
-      return product.image.replace(/http:\/\/(?:127\.0\.0\.1|localhost):8000/, BACKEND_URL)
-    }
-
-    // If image path is relative (e.g., /media/products/img.jpg), prepend backend domain
+    // Relative media path from Django
     if (product.image.startsWith('/')) {
       return `${BACKEND_URL}${product.image}`
+    }
+
+    // Replace old dev hostnames with active backend url
+    if (product.image.includes('127.0.0.1:8000') || product.image.includes('onrender.com')) {
+      return product.image
+        .replace(/https?:\/\/127\.0\.0\.1:8000/, BACKEND_URL)
+        .replace(/https?:\/\/.*\.onrender\.com/, BACKEND_URL)
     }
     
     return product.image
   }
 
   const addToCartHandler = () => {
-    try {
-      const currentCart = JSON.parse(localStorage.getItem('cartItems')) || []
-      const itemExists = currentCart.find((item) => (item.id || item._id) === productId)
-
-      if (itemExists) {
-        currentCart.forEach((item) => {
-          if ((item.id || item._id) === productId) {
-            item.qty = Math.min(item.qty + 1, maxStock)
-          }
-        })
-      } else {
-        currentCart.push({
-          id: productId,
-          _id: productId,
-          name: product.name,
-          image: getProductImage(),
-          price: Number(product.price),
-          countInStock: maxStock,
-          qty: 1
-        })
-      }
-
-      localStorage.setItem('cartItems', JSON.stringify(currentCart))
-      window.dispatchEvent(new Event('cartUpdated'))
-      
-    } catch (error) {
-      console.error('Failed to append item to client storage context:', error)
-    }
+    addToCart(product, 1)
+    window.dispatchEvent(new Event('cartUpdated'))
   }
 
   const cardStyle = {
@@ -96,7 +76,7 @@ function ProductCard({ product }) {
           </Link>
           
           <Card.Text as="h5" className="fw-bold text-success mb-2 font-monospace">
-            ₦{Number(product.price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            ₦{Number(product.price || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </Card.Text>
         </div>
 
@@ -104,11 +84,11 @@ function ProductCard({ product }) {
           type="button"
           variant="outline-secondary"
           className="w-100 py-2 rounded-pill fw-bold text-uppercase tracking-wider btn-sm mt-auto d-flex align-items-center justify-content-center gap-2"
-          disabled={product.countInStock === 0}
+          disabled={maxStock === 0}
           onClick={addToCartHandler}
         >
           <FiShoppingBag />
-          {product.countInStock > 0 ? `Add To Cart` : 'Out of Stock'}
+          {maxStock > 0 ? 'Add To Cart' : 'Out of Stock'}
         </Button>
       </Card.Body>
     </Card>

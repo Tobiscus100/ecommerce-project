@@ -2,31 +2,39 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.db.models import Q
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Product, Category, Order, OrderItem
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
-        # Allow sign in with either username OR email
-        account_identifier = attrs.get('username')
-        
-        if account_identifier:
-            # Check if there is a matching user by email or username (case-insensitive)
-            matched_user = User.objects.filter(
-                Q(username__iexact=account_identifier) | Q(email__iexact=account_identifier)
-            ).first()
+        login_input = attrs.get('username')
+        password = attrs.get('password')
 
-            if matched_user:
-                # Reassign the actual Django username so SimpleJWT internal authentication succeeds
-                attrs['username'] = matched_user.username
+        # 1. Look up user by email or username (case-insensitive)
+        user = User.objects.filter(
+            Q(email__iexact=login_input) | Q(username__iexact=login_input)
+        ).first()
 
-        data = super().validate(attrs)
+        # 2. Validate password directly against the found user instance
+        if user and user.check_password(password):
+            if not user.is_active:
+                raise serializers.ValidationError({"detail": "User account is disabled."})
 
-        # Include custom user profile fields in JWT response
-        data['id'] = self.user.id
-        data['username'] = self.user.username
-        data['email'] = self.user.email
-        data['name'] = self.user.first_name or self.user.username
-        return data
+            # 3. Mint the JWT pair directly for this user
+            refresh = RefreshToken.for_user(user)
+
+            return {
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+                'id': user.id,
+                '_id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'name': user.first_name or user.username,
+                'isAdmin': user.is_staff,
+            }
+
+        raise serializers.ValidationError({"detail": "Invalid credentials. Please verify your email and password."})
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
