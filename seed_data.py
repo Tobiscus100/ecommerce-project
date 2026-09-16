@@ -80,7 +80,7 @@ def seed_database():
         {
             "category": "Electronics", "name": "Anker Braided USB-C to USB-C Cable (1m)",
             "price": 7500.00, "brand": "Anker", "countInStock": 50,
-            "image": "https://images.unsplash.com/photo-1609592426508-cc85347ff22c?auto=format&fit=crop&w=600&q=80",
+            "image": "https://images.unsplash.com/photo-1588508065123-287b28e013da?auto=format&fit=crop&w=600&q=80",
             "description": "Heavy-duty 60W fast-charging nylon cable engineered for 25,000+ bends."
         },
         {
@@ -174,7 +174,7 @@ def seed_database():
         {
             "category": "Apparel", "name": "Braided Stretch Casual Canvas Belt",
             "price": 7000.00, "brand": "Levi's", "countInStock": 35,
-            "image": "https://images.unsplash.com/photo-1542272604-780c96856592?auto=format&fit=crop&w=600&q=80",
+            "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80",
             "description": "Flexible hole-free weave strap fitted with a brushed metal alloy buckle."
         },
         {
@@ -192,7 +192,7 @@ def seed_database():
         {
             "category": "Apparel", "name": "Premium Leather Boot Wax & Conditioner",
             "price": 5400.00, "brand": "Thursday Boot Co", "countInStock": 28,
-            "image": "https://images.unsplash.com/photo-1638247025967-b4e38f6893b4?auto=format&fit=crop&w=600&q=80",
+            "image": "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=600&q=80",
             "description": "Natural beeswax formula nourishing and weatherproofing full-grain leather."
         },
         {
@@ -260,7 +260,7 @@ def seed_database():
         {
             "category": "Home & Kitchen", "name": "Heat-Insulated Silicone Trivet Coaster Set",
             "price": 4800.00, "brand": "Le Creuset", "countInStock": 35,
-            "image": "https://images.unsplash.com/photo-1584990347449-37968535a287?auto=format&fit=crop&w=600&q=80",
+           "image": "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=600&q=80",
             "description": "Honeycomb anti-slip surface safeguarding counters from scalding Dutch ovens."
         },
         {
