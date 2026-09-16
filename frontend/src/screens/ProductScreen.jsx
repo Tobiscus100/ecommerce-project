@@ -4,6 +4,8 @@ import { Row, Col, Image, ListGroup, Card, Button, Container, Alert, Form } from
 import { FiArrowLeft, FiShoppingBag, FiMinus, FiPlus, FiCheckCircle } from 'react-icons/fi'
 import axios from 'axios'
 
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://ecommerce-project-3cq9.onrender.com'
+
 export default function ProductScreen() {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -18,12 +20,16 @@ export default function ProductScreen() {
     const fetchProduct = async () => {
       try {
         setLoading(true)
-        const { data } = await axios.get(`http://127.0.0.1:8000/api/products/${id}/`)
+        const { data } = await axios.get(`${BASE_URL}/api/products/${id}/`)
         setProduct(data)
         
         if (data && data.image) {
-          if (data.image.includes('http://127.0.0.1:8000/https://') || data.image.includes('http://localhost:8000/https://')) {
-            setMainImage(data.image.split('8000/')[1])
+          if (data.image.includes('8000/https://') || data.image.includes('onrender.com/https://')) {
+            setMainImage(data.image.split(/(?:8000|onrender\.com)\//)[1])
+          } else if (data.image.startsWith('http://127.0.0.1:8000') || data.image.startsWith('http://localhost:8000')) {
+            setMainImage(data.image.replace(/http:\/\/(?:127\.0\.0\.1|localhost):8000/, BASE_URL))
+          } else if (data.image.startsWith('/')) {
+            setMainImage(`${BASE_URL}${data.image}`)
           } else {
             setMainImage(data.image)
           }

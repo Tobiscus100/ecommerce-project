@@ -3,8 +3,8 @@ import { Row, Col, Button, Container } from 'react-bootstrap'
 import ProductCard from '../components/ProductCard'
 import axios from 'axios'
 
-// Set your live Render URL here (without a trailing slash)
-const BASE_URL = import.meta.env.VITE_API_URL || 'https://ecommerce-project-738i.onrender.com'
+// Updated to your active Render backend instance
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://ecommerce-project-3cq9.onrender.com'
 
 function HomeScreen() {
   const [products, setProducts] = useState([])

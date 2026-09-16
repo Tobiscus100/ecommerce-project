@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Row, Col, ListGroup, Image, Button, Card, Container, Form } from 'react-bootstrap'
 import { FiMinus, FiPlus, FiTrash2, FiShoppingBag } from 'react-icons/fi'
 
-const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://ecommerce-project-738i.onrender.com'
+const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://ecommerce-project-3cq9.onrender.com'
 
 function CartScreen() {
   const navigate = useNavigate()

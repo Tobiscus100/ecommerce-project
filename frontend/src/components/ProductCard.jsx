@@ -3,7 +3,7 @@ import { Card, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { FiShoppingBag } from 'react-icons/fi'
 
-const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://ecommerce-project-738i.onrender.com'
+const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://ecommerce-project-3cq9.onrender.com'
 
 function ProductCard({ product }) {
   const [isHovered, setIsHovered] = useState(false)

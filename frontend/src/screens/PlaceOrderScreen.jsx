@@ -3,6 +3,8 @@ import { useNavigate, Link } from 'react-router-dom'
 import { Button, Row, Col, ListGroup, Image, Card, Container } from 'react-bootstrap'
 import axios from 'axios'
 
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://ecommerce-project-3cq9.onrender.com'
+
 export default function PlaceOrderScreen() {
   const navigate = useNavigate()
   const [cartItems, setCartItems] = useState([])
@@ -53,7 +55,7 @@ export default function PlaceOrderScreen() {
       }
 
       const { data } = await axios.post(
-        'http://127.0.0.1:8000/api/orders/stripe-checkout/',
+        `${BASE_URL}/api/orders/stripe-checkout/`,
         { 
           cartItems,
           shippingAddress 
