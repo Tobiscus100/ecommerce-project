@@ -26,316 +26,316 @@ def seed_database():
         cat, created = Category.objects.get_or_create(name=cat_name)
         categories[cat_name] = cat
 
-    # 2. Complete 50 Real-World Items Linked to Explicit, Matching Product Photos (Prices updated to Naira)
+    # 2. Complete 50 Real-World Items Linked to Explicit, Matching Product Photos (Prices capped under ₦10,000)
     items = [
         # === ELECTRONICS ===
         {
-            "category": "Electronics", "name": "Samsung 65-inch 4K Smart QLED TV",
-            "price": 1350000.00, "brand": "Samsung", "countInStock": 12,
-            "image": "https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=500&q=80",
-            "description": "Experience breathtaking color clarity with an intelligent 4K processor."
+            "category": "Electronics", "name": "Braided 4K Ultra HD HDMI Cable (2m)",
+            "price": 6500.00, "brand": "Samsung", "countInStock": 40,
+            "image": "https://images.unsplash.com/photo-1593784991095-a205069470b6?auto=format&fit=crop&w=600&q=80",
+            "description": "High-speed 4K/60Hz transmission cable with gold-plated connectors."
         },
         {
-            "category": "Electronics", "name": "Sony WH-1000XM5 Wireless Headphones",
-            "price": 520000.00, "brand": "Sony", "countInStock": 25,
-            "image": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=500&q=80",
-            "description": "Industry-leading noise cancellation paired with pristine acoustic sound."
+            "category": "Electronics", "name": "Sony In-Ear Wired Bass Earphones",
+            "price": 8500.00, "brand": "Sony", "countInStock": 35,
+            "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80",
+            "description": "Clear acoustic sound with punchy bass and an inline hands-free microphone."
         },
         {
-            "category": "Electronics", "name": "Apple MacBook Air M3 13-inch",
-            "price": 1650000.00, "brand": "Apple", "countInStock": 8,
-            "image": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&q=80",
-            "description": "Strikingly thin architecture running the blindingly fast M3 system loop."
+            "category": "Electronics", "name": "Silicone Keyboard Protector & Dust Cover",
+            "price": 3500.00, "brand": "Apple", "countInStock": 50,
+            "image": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80",
+            "description": "Ultra-thin precision mold shielding your keyboard from spills and crumbs."
         },
         {
-            "category": "Electronics", "name": "Dell UltraSharp 27-inch 4K Monitor",
-            "price": 645000.00, "brand": "Dell", "countInStock": 14,
-            "image": "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500&q=80",
-            "description": "Impeccable color coverage specs matching critical creative workstation requirements."
+            "category": "Electronics", "name": "Screen Cleaning Kit & Microfiber Cloths",
+            "price": 4200.00, "brand": "Dell", "countInStock": 45,
+            "image": "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=600&q=80",
+            "description": "Streak-free antibacterial spray designed safely for monitor and phone displays."
         },
         {
-            "category": "Electronics", "name": "iPad Air 11-inch M2 Chip",
-            "price": 900000.00, "brand": "Apple", "countInStock": 19,
-            "image": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=500&q=80",
-            "description": "Lightweight, versatile, and insanely powerful for mobile design pipelines."
+            "category": "Electronics", "name": "Tempered Glass Screen Protector (9H)",
+            "price": 3800.00, "brand": "Apple", "countInStock": 60,
+            "image": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=600&q=80",
+            "description": "Scratch-resistant oleophobic tempered shield preserving screen responsiveness."
         },
         {
-            "category": "Electronics", "name": "Logitech G Pro X Superlight Mouse",
-            "price": 210000.00, "brand": "Logitech", "countInStock": 30,
-            "image": "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=500&q=80",
-            "description": "Engineered meticulously alongside leading esports athletes."
+            "category": "Electronics", "name": "Logitech Ergonomic Silent Mouse Pad",
+            "price": 5000.00, "brand": "Logitech", "countInStock": 55,
+            "image": "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=600&q=80",
+            "description": "Smooth micro-weave cloth surface with non-slip natural rubber base."
         },
         {
-            "category": "Electronics", "name": "Keychron Q1 Mechanical Keyboard",
-            "price": 285000.00, "brand": "Keychron", "countInStock": 11,
-            "image": "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=500&q=80",
-            "description": "Full CNC machined aluminum body assembly housing hot-swappable tactile switches."
+            "category": "Electronics", "name": "Mechanical Switch Keycap Puller Set",
+            "price": 4500.00, "brand": "Keychron", "countInStock": 30,
+            "image": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=600&q=80",
+            "description": "Stainless steel dual wire tool for effortless keycap and switch maintenance."
         },
         {
-            "category": "Electronics", "name": "Nintendo Switch OLED Model",
-            "price": 525000.00, "brand": "Nintendo", "countInStock": 15,
-            "image": "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&q=80",
-            "description": "Vibrant screen displaying ultra-sharp color rendering performance profiles."
+            "category": "Electronics", "name": "Thumb Grip Caps for Gaming Controllers",
+            "price": 3000.00, "brand": "Nintendo", "countInStock": 70,
+            "image": "https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?auto=format&fit=crop&w=600&q=80",
+            "description": "Ergonomic textured silicone analog thumb caps enhancing control accuracy."
         },
         {
-            "category": "Electronics", "name": "Anker Prime 20,000mAh Power Bank",
-            "price": 195000.00, "brand": "Anker", "countInStock": 40,
-            "image": "https://images.unsplash.com/photo-1706059740201-9b09bf95df87?w=500&q=80",
-            "description": "Blazing fast charging capacity architecture safely managing power."
+            "category": "Electronics", "name": "Anker Braided USB-C to USB-C Cable (1m)",
+            "price": 7500.00, "brand": "Anker", "countInStock": 50,
+            "image": "https://images.unsplash.com/photo-1609592426508-cc85347ff22c?auto=format&fit=crop&w=600&q=80",
+            "description": "Heavy-duty 60W fast-charging nylon cable engineered for 25,000+ bends."
         },
         {
-            "category": "Electronics", "name": "Sonos Era 100 Smart Speaker",
-            "price": 375000.00, "brand": "Sonos", "countInStock": 16,
-            "image": "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=500&q=80",
-            "description": "Acoustic remastering framework optimizing room-filling stereo sound performance."
+            "category": "Electronics", "name": "Auxiliary 3.5mm Gold-Plated Audio Cord",
+            "price": 2800.00, "brand": "Sonos", "countInStock": 40,
+            "image": "https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=600&q=80",
+            "description": "Double-shielded oxygen-free copper core preventing static audio interference."
         },
 
         # === ACCESSORIES ===
         {
-            "category": "Accessories", "name": "Apple Watch Series 9 GPS",
-            "price": 600000.00, "brand": "Apple", "countInStock": 22,
-            "image": "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=500&q=80",
-            "description": "Advanced health sensing data engines managing internal biometric tracking metrics."
+            "category": "Accessories", "name": "Breathable Silicone Smartwatch Strap",
+            "price": 5500.00, "brand": "Apple", "countInStock": 45,
+            "image": "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=600&q=80",
+            "description": "Sweat-resistant soft fluoroelastomer sports band with secure pin closure."
         },
         {
-            "category": "Accessories", "name": "Ray-Ban Classic Wayfarer",
-            "price": 245000.00, "brand": "Ray-Ban", "countInStock": 25,
-            "image": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=500&q=80",
-            "description": "Timeless structural silhouette styling configurations matched to high-performance lenses."
+            "category": "Accessories", "name": "Hard Shell Foldable Sunglasses Case",
+            "price": 4000.00, "brand": "Ray-Ban", "countInStock": 35,
+            "image": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=600&q=80",
+            "description": "Shockproof protective eyewear box with velvet interior lining."
         },
         {
-            "category": "Accessories", "name": "Peak Design Everyday Backpack 20L",
-            "price": 420000.00, "brand": "Peak Design", "countInStock": 10,
-            "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&q=80",
-            "description": "Award-winning flexible compartment organization system safeguarding gear layouts."
+            "category": "Accessories", "name": "Weatherproof Backpack Rain Cover",
+            "price": 6000.00, "brand": "Peak Design", "countInStock": 30,
+            "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80",
+            "description": "Water-resistant ripstop nylon shell that easily fits over 20-30L packs."
         },
         {
-            "category": "Accessories", "name": "Leather Minimalist Wallet",
-            "price": 68000.00, "brand": "Bellroy", "countInStock": 50,
-            "image": "https://images.unsplash.com/photo-1627123424574-724758594e93?w=500&q=80",
-            "description": "Premium top-grain leather tailored into an ultra-slim operational footprint."
+            "category": "Accessories", "name": "RFID Blocking Slim Card Holder",
+            "price": 7500.00, "brand": "Bellroy", "countInStock": 50,
+            "image": "https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=600&q=80",
+            "description": "Compact front-pocket sleeve shielding credit cards from unauthorized scanning."
         },
         {
-            "category": "Accessories", "name": "Kindle Paperwhite 16GB",
-            "price": 225000.00, "brand": "Amazon", "countInStock": 18,
-            "image": "https://images.unsplash.com/photo-1592496001020-d31bd830651f?w=500&q=80",
-            "description": "Glare-free display surface explicitly mimicking traditional physical book structures."
+            "category": "Accessories", "name": "Clip-On LED Reading Book Light",
+            "price": 5800.00, "brand": "Amazon", "countInStock": 40,
+            "image": "https://images.unsplash.com/photo-1592496001020-d31bd830651f?auto=format&fit=crop&w=600&q=80",
+            "description": "Flexible neck with warm eye-care light modes and USB rechargeable battery."
         },
         {
-            "category": "Accessories", "name": "Anker Soundcore Motion+ Speaker",
-            "price": 150000.00, "brand": "Anker", "countInStock": 35,
-            "image": "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500&q=80",
-            "description": "Hi-Res Audio certification containing specialized custom dual high-frequency tweeters."
+            "category": "Accessories", "name": "Portable EVA Hard Protective Travel Pouch",
+            "price": 4800.00, "brand": "Anker", "countInStock": 35,
+            "image": "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=600&q=80",
+            "description": "Waterproof zipper organizer case for power banks, adapters, and audio cords."
         },
         {
-            "category": "Accessories", "name": "Elgato Stream Deck MK.2",
-            "price": 225000.00, "brand": "Elgato", "countInStock": 12,
-            "image": "https://images.unsplash.com/photo-1625805503463-55734a74a173?w=500&q=80",
-            "description": "Customizable LCD keys to control applications, switch scenes, and trigger macros."
+            "category": "Accessories", "name": "Anti-Slip Desktop Cable Management Clips",
+            "price": 3200.00, "brand": "Elgato", "countInStock": 60,
+            "image": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80",
+            "description": "Self-adhesive silicone wire holders keeping work desks neat and clutter-free."
         },
         {
-            "category": "Accessories", "name": "Satechi Trio Wireless Charging Pad",
-            "price": 180000.00, "brand": "Satechi", "countInStock": 20,
-            "image": "https://images.unsplash.com/photo-1622445262465-2481c4574875?w=500&q=80",
-            "description": "Simultaneous fast power routing management layout targeting smartphone form factors."
+            "category": "Accessories", "name": "Compact Foldable Phone Stand",
+            "price": 4500.00, "brand": "Satechi", "countInStock": 45,
+            "image": "https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=600&q=80",
+            "description": "Sturdy aluminum desk cradle providing multi-angle hands-free viewing."
         },
         {
-            "category": "Accessories", "name": "Hydro Flask 32oz Wide Mouth",
-            "price": 68000.00, "brand": "Hydro Flask", "countInStock": 60,
-            "image": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=500&q=80",
-            "description": "Double-wall vacuum insulation design safeguarding internal thermal properties."
+            "category": "Accessories", "name": "Wide Mouth Silicone Water Bottle Boot",
+            "price": 3800.00, "brand": "Hydro Flask", "countInStock": 55,
+            "image": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=600&q=80",
+            "description": "Protective bottom sleeve cushioning drops and eliminating loud clanks."
         },
         {
-            "category": "Accessories", "name": "Belkin AirTag Leather Key Ring",
-            "price": 30000.00, "brand": "Belkin", "countInStock": 100,
-            "image": "https://images.unsplash.com/photo-1581415260586-5d5d90042a57?w=500&q=80",
-            "description": "Durable snap closure housing built to safeguard secure item tracking attachments."
+            "category": "Accessories", "name": "Belkin AirTag Protective Case Key Ring",
+            "price": 6500.00, "brand": "Belkin", "countInStock": 80,
+            "image": "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=600&q=80",
+            "description": "Scratch-resistant twist-and-lock shell keeping tracking tags fastened securely."
         },
 
         # === APPAREL ===
         {
-            "category": "Apparel", "name": "Premium Cotton Essentials Hoodie",
-            "price": 112000.00, "brand": "Uniqlo", "countInStock": 40,
-            "image": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500&q=80",
-            "description": "Ultra-soft heavy cotton tailored for everyday functional luxury styling templates."
+            "category": "Apparel", "name": "Classic Heavyweight Cotton Crew Neck Tee",
+            "price": 8500.00, "brand": "Uniqlo", "countInStock": 40,
+            "image": "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=600&q=80",
+            "description": "100% breathable organic ring-spun cotton crafted for durable daily wear."
         },
         {
-            "category": "Apparel", "name": "Classic White Minimalist Sneakers",
-            "price": 180000.00, "brand": "Adidas", "countInStock": 15,
-            "image": "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=500&q=80",
-            "description": "Custom inner-sole assemblies matched to structured water-resistant uppers."
+            "category": "Apparel", "name": "Sneaker Cleaning Brush & Foam Shampoo",
+            "price": 6200.00, "brand": "Adidas", "countInStock": 30,
+            "image": "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=600&q=80",
+            "description": "Safe deep-cleaning formula designed for canvas, knit mesh, and leather uppers."
         },
         {
-            "category": "Apparel", "name": "Waterproof Technical Shell Jacket",
-            "price": 375000.00, "brand": "Arc'teryx", "countInStock": 9,
-            "image": "https://images.unsplash.com/photo-1548883354-7622d03aca27?w=500&q=80",
-            "description": "Advanced membrane shielding against intense seasonal microclimatic extremes."
+            "category": "Apparel", "name": "Waterproof Outdoor Storm Poncho",
+            "price": 9500.00, "brand": "Arc'teryx", "countInStock": 25,
+            "image": "https://images.unsplash.com/photo-1548883354-7622d03aca27?auto=format&fit=crop&w=600&q=80",
+            "description": "Ultra-lightweight ripstop rain cape packed inside a drawstring pouch."
         },
         {
-            "category": "Apparel", "name": "Raw Denim Slim Fit Jeans",
-            "price": 147000.00, "brand": "Levi's", "countInStock": 22,
-            "image": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500&q=80",
-            "description": "Japanese selvedge denim construction forming uniquely to personal gait patterns."
+            "category": "Apparel", "name": "Braided Stretch Casual Canvas Belt",
+            "price": 7000.00, "brand": "Levi's", "countInStock": 35,
+            "image": "https://images.unsplash.com/photo-1542272604-780c96856592?auto=format&fit=crop&w=600&q=80",
+            "description": "Flexible hole-free weave strap fitted with a brushed metal alloy buckle."
         },
         {
-            "category": "Apparel", "name": "Polarized Active Sport Sunglasses",
-            "price": 210000.00, "brand": "Oakley", "countInStock": 14,
-            "image": "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500&q=80",
-            "description": "High-wrap framework shielding sight lines during outdoor training loops."
+            "category": "Apparel", "name": "UV400 Polarized Lightweight Sun Glasses",
+            "price": 9000.00, "brand": "Oakley", "countInStock": 30,
+            "image": "https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=600&q=80",
+            "description": "Glare-reducing polarized lenses shielded with full ultraviolet protection."
         },
         {
-            "category": "Apparel", "name": "Merino Wool Knit Sweater",
-            "price": 165000.00, "brand": "Everlane", "countInStock": 16,
-            "image": "https://images.unsplash.com/photo-1614975058789-41316d0e2e9c?w=500&q=80",
-            "description": "Sustainably sourced wool fiber matrix optimizing natural thermal properties."
+            "category": "Apparel", "name": "Merino Wool Blend Thermal Boot Socks (2-Pack)",
+            "price": 6800.00, "brand": "Everlane", "countInStock": 40,
+            "image": "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&w=600&q=80",
+            "description": "Cushioned moisture-wicking wool blend designed to prevent blister friction."
         },
         {
-            "category": "Apparel", "name": "Classic Leather Chelsea Boots",
-            "price": 270000.00, "brand": "Thursday Boot Co", "countInStock": 11,
-            "image": "https://images.unsplash.com/photo-1638247025967-b4e38f6893b4?w=500&q=80",
-            "description": "Goodyear welt construction layout ensuring complete structural water-barrier performance."
+            "category": "Apparel", "name": "Premium Leather Boot Wax & Conditioner",
+            "price": 5400.00, "brand": "Thursday Boot Co", "countInStock": 28,
+            "image": "https://images.unsplash.com/photo-1638247025967-b4e38f6893b4?auto=format&fit=crop&w=600&q=80",
+            "description": "Natural beeswax formula nourishing and weatherproofing full-grain leather."
         },
         {
-            "category": "Apparel", "name": "Breathable Core Training Shorts",
-            "price": 72000.00, "brand": "Nike", "countInStock": 35,
-            "image": "https://images.unsplash.com/photo-1539185441755-769473a23570?w=500&q=80",
-            "description": "Moisture-wicking mesh ventilation patterns engineered to dump body heat dynamically."
+            "category": "Apparel", "name": "Moisture-Wicking Athletic Sweatband Set",
+            "price": 4000.00, "brand": "Nike", "countInStock": 50,
+            "image": "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=600&q=80",
+            "description": "High-absorbency terry cotton wrist and headbands for intense gym sessions."
         },
         {
-            "category": "Apparel", "name": "Chrono Stainless Steel Watch",
-            "price": 322500.00, "brand": "Seiko", "countInStock": 13,
-            "image": "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=500&q=80",
-            "description": "Japanese quartz multi-dial sub-register movement housed inside surgical steel."
+            "category": "Apparel", "name": "Stainless Steel Mesh Watch Milanese Band",
+            "price": 7500.00, "brand": "Seiko", "countInStock": 35,
+            "image": "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=600&q=80",
+            "description": "Magnetic lock stainless steel woven band adjustable to all wrist sizes."
         },
         {
-            "category": "Apparel", "name": "Ergonomic Canvas Travel Duffel",
-            "price": 127500.00, "brand": "Herschel", "countInStock": 20,
-            "image": "https://images.unsplash.com/photo-1572569511254-18f66d444688?w=500&q=80",
-            "description": "Heavyweight treated cotton weave layout matched to reinforced hardware assemblies."
+            "category": "Apparel", "name": "Drawstring Canvas Laundry & Shoe Sack",
+            "price": 4200.00, "brand": "Herschel", "countInStock": 45,
+            "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80",
+            "description": "Durable cotton canvas storage bag separating shoes from travel clothes."
         },
 
         # === HOME & KITCHEN ===
         {
-            "category": "Home & Kitchen", "name": "Barista Express Espresso Machine",
-            "price": 1050000.00, "brand": "Breville", "countInStock": 7,
-            "image": "https://images.unsplash.com/photo-1517256064527-09c53b2d0c6b?w=500&q=80",
-            "description": "Integrated dose-control conical burr grinder system providing rich espresso profiles."
+            "category": "Home & Kitchen", "name": "Stainless Steel Espresso Milk Pitcher (350ml)",
+            "price": 7200.00, "brand": "Breville", "countInStock": 25,
+            "image": "https://images.unsplash.com/photo-1517256064527-09c53b2d0c6b?auto=format&fit=crop&w=600&q=80",
+            "description": "Precision pouring spout calibrated inside with laser measurement markings."
         },
         {
-            "category": "Home & Kitchen", "name": "Vitamix E310 Explorian Blender",
-            "price": 525000.00, "brand": "Vitamix", "countInStock": 12,
-            "image": "https://images.unsplash.com/photo-1578643463396-0997cb5328c1?w=500&q=80",
-            "description": "Aircraft-grade hardened stainless steel cutting edges fracturing difficult items."
+            "category": "Home & Kitchen", "name": "Silicone Non-Scratch Blender Scraper Spatula",
+            "price": 3800.00, "brand": "Vitamix", "countInStock": 40,
+            "image": "https://images.unsplash.com/photo-1570222094114-d054a817e56b?auto=format&fit=crop&w=600&q=80",
+            "description": "Extended handle flexible scraper reaching cleanly beneath blender blades."
         },
         {
-            "category": "Home & Kitchen", "name": "Fellow Stagg EKG Electric Kettle",
-            "price": 247500.00, "brand": "Fellow", "countInStock": 15,
-            "image": "https://images.unsplash.com/photo-1542382156909-9ae3b2f5919a?w=500&q=80",
-            "description": "Precision pour gooseneck spout layout mapped to automated manual control interfaces."
+            "category": "Home & Kitchen", "name": "Stainless Steel Tea Infuser Mesh Strainer",
+            "price": 4500.00, "brand": "Fellow", "countInStock": 35,
+            "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
+            "description": "Ultra-fine perforated mesh basket designed for loose leaf herbal brews."
         },
         {
-            "category": "Home & Kitchen", "name": "Chef's Classic Cast Iron Skillet",
-            "price": 45000.00, "brand": "Lodge", "countInStock": 40,
-            "image": "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?w=500&q=80",
-            "description": "Pre-seasoned cooking surface creating high-grade heat retention properties."
+            "category": "Home & Kitchen", "name": "Heavy-Duty Silicone Cast Iron Handle Holder",
+            "price": 3500.00, "brand": "Lodge", "countInStock": 50,
+            "image": "https://images.unsplash.com/photo-1584990347449-37968535a287?auto=format&fit=crop&w=600&q=80",
+            "description": "Heat-resistant grip insulating hands up to 230°C from searing hot pans."
         },
         {
-            "category": "Home & Kitchen", "name": "Philips Premium Airfryer XXL",
-            "price": 375000.00, "brand": "Philips", "countInStock": 14,
-            "image": "https://images.unsplash.com/photo-1621972750749-0fbb1abb7736?w=500&q=80",
-            "description": "Vortex heat extraction technology draining unwanted excessive saturated oils."
+            "category": "Home & Kitchen", "name": "Reusable Air Fryer Silicone Baking Liners",
+            "price": 5500.00, "brand": "Philips", "countInStock": 45,
+            "image": "https://images.unsplash.com/photo-1585515320310-259814833e62?auto=format&fit=crop&w=600&q=80",
+            "description": "Food-grade non-stick silicone basket insert preventing oily kitchen mess."
         },
         {
-            "category": "Home & Kitchen", "name": "Dyson V15 Detect Vacuum",
-            "price": 1125000.00, "brand": "Dyson", "countInStock": 6,
-            "image": "https://images.unsplash.com/photo-1558317374-067fb5f30001?w=500&q=80",
-            "description": "Intelligent sensor array quantifying particle pollution density onto display screens."
+            "category": "Home & Kitchen", "name": "Washable HEPA Filter Replacement",
+            "price": 6800.00, "brand": "Dyson", "countInStock": 30,
+            "image": "https://images.unsplash.com/photo-1558317374-067fb5f30001?auto=format&fit=crop&w=600&q=80",
+            "description": "High-efficiency post-motor filter capturing microscopic allergen particles."
         },
         {
-            "category": "Home & Kitchen", "name": "Automatic Ceramic Burr Coffee Grinder",
-            "price": 135000.00, "brand": "OXO", "countInStock": 22,
-            "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=500&q=80",
-            "description": "Uniform extraction geometry output specs featuring distinct granular parameters."
+            "category": "Home & Kitchen", "name": "Natural Wood Espresso Grinder Cleaning Brush",
+            "price": 3200.00, "brand": "OXO", "countInStock": 60,
+            "image": "https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=600&q=80",
+            "description": "Tough natural boar bristles sweeping coffee grounds without scratching steel."
         },
         {
-            "category": "Home & Kitchen", "name": "Enamelled Dutch Oven 5.5Qt",
-            "price": 435000.00, "brand": "Le Creuset", "countInStock": 8,
-            "image": "https://images.unsplash.com/photo-1464454701691-ee1751fa631b?w=500&q=80",
-            "description": "Impeccable chip-resistant structural enamel layer optimizing heat balancing loops."
+            "category": "Home & Kitchen", "name": "Heat-Insulated Silicone Trivet Coaster Set",
+            "price": 4800.00, "brand": "Le Creuset", "countInStock": 35,
+            "image": "https://images.unsplash.com/photo-1584990347449-37968535a287?auto=format&fit=crop&w=600&q=80",
+            "description": "Honeycomb anti-slip surface safeguarding counters from scalding Dutch ovens."
         },
         {
-            "category": "Home & Kitchen", "name": "Smart 10-in-1 Multi-Cooker",
-            "price": 195000.00, "brand": "Instant Pot", "countInStock": 25,
-            "image": "https://images.unsplash.com/photo-1544256718-3bcf237f3974?w=500&q=80",
-            "description": "Advanced calibration circuitry parsing complex slow-cooking execution paths."
+            "category": "Home & Kitchen", "name": "Silicone Sealing Lid Ring Replacement (6Qt)",
+            "price": 3600.00, "brand": "Instant Pot", "countInStock": 45,
+            "image": "https://images.unsplash.com/photo-1544233726-9f1d2b27be8b?auto=format&fit=crop&w=600&q=80",
+            "description": "Tight-fitting food-grade silicone ring maintaining optimal cooking pressure."
         },
         {
-            "category": "Home & Kitchen", "name": "Premium SodaStream Aqua Fizz",
-            "price": 240000.00, "brand": "SodaStream", "countInStock": 18,
-            "image": "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500&q=80",
-            "description": "Elegant carbonation chamber structural assembly tailored to fit glass carafes."
+            "category": "Home & Kitchen", "name": "Glass Cleaning Sponge & Long Bottle Brush",
+            "price": 3000.00, "brand": "SodaStream", "countInStock": 55,
+            "image": "https://images.unsplash.com/photo-1527661591475-527312dd65f5?auto=format&fit=crop&w=600&q=80",
+            "description": "Ergonomic curved scrub head cleaning deep corners of water bottles and carafes."
         },
 
         # === FITNESS ===
         {
-            "category": "Fitness", "name": "Bowflex SelectTech Adjustable Dumbbells",
-            "price": 645000.00, "brand": "Bowflex", "countInStock": 10,
-            "image": "https://images.unsplash.com/photo-1638536532686-d610adfc8e5c?w=500&q=80",
-            "description": "Dynamic weight selector system replacing 15 individual dumbbell pairs."
+            "category": "Fitness", "name": "Anti-Slip Gym Chalk Ball (60g)",
+            "price": 4000.00, "brand": "Bowflex", "countInStock": 40,
+            "image": "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=600&q=80",
+            "description": "100% magnesium carbonate chalk bag delivering zero-slip barbell control."
         },
         {
-            "category": "Fitness", "name": "Premium High-Density Yoga Mat",
-            "price": 132000.00, "brand": "Lululemon", "countInStock": 30,
-            "image": "https://images.unsplash.com/photo-1592432678016-e910b452f9a2?w=500&q=80",
-            "description": "Ultra-grippy textured surface compound delivering deep joint cushioning feedback."
+            "category": "Fitness", "name": "Adjustable Cotton Yoga Mat Carry Strap",
+            "price": 3500.00, "brand": "Lululemon", "countInStock": 50,
+            "image": "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?auto=format&fit=crop&w=600&q=80",
+            "description": "Reinforced sling buckle looping snugly around all yoga mat sizes."
         },
         {
-            "category": "Fitness", "name": "Theragun Pro Deep Tissue Massager",
-            "price": 750000.00, "brand": "Therabody", "countInStock": 15,
-            "image": "https://images.unsplash.com/photo-1640537754664-92765d752250?w=500&q=80",
-            "description": "Professional-grade percussion therapy engine accelerating recovery workflows."
+            "category": "Fitness", "name": "Targeted Trigger Point Massage Lacrosse Ball",
+            "price": 4500.00, "brand": "Therabody", "countInStock": 60,
+            "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=600&q=80",
+            "description": "High-density solid rubber ball relieving tight knots and myofascial tension."
         },
         {
-            "category": "Fitness", "name": "Garmin Fenix 7X Sapphire Solar",
-            "price": 1350000.00, "brand": "Garmin", "countInStock": 8,
-            "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80",
-            "description": "Ultra-rugged tracking terminal processing complex offline topographic maps."
+            "category": "Fitness", "name": "Charging Cradle Dock Cord with Clip",
+            "price": 6000.00, "brand": "Garmin", "countInStock": 35,
+            "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80",
+            "description": "Sturdy copper-pin magnetic power adapter cord charging sports watches safely."
         },
         {
-            "category": "Fitness", "name": "Peloton Digital Fitness Bike",
-            "price": 2160000.00, "brand": "Peloton", "countInStock": 4,
-            "image": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=500&q=80",
-            "description": "Immersive cardio workstation infrastructure packing smooth resistance control hubs."
+            "category": "Fitness", "name": "Padded Breathable Cycling Seat Cover",
+            "price": 8500.00, "brand": "Peloton", "countInStock": 25,
+            "image": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=600&q=80",
+            "description": "Ergonomic memory foam cushion pad relieving tailbone pressure on workouts."
         },
         {
-            "category": "Fitness", "name": "Heavy Duty Fabric Resistance Bands",
-            "price": 37500.00, "brand": "Gymshark", "countInStock": 50,
-            "image": "https://images.unsplash.com/photo-1605296867304-46d5465a25f1?w=500&q=80",
-            "description": "Anti-slip internal grip weaving patterns preventing sudden elastic slips."
+            "category": "Fitness", "name": "Fabric Resistance Booty Loop Band (Medium)",
+            "price": 5000.00, "brand": "Gymshark", "countInStock": 60,
+            "image": "https://images.unsplash.com/photo-1598289431512-b97b0917affc?auto=format&fit=crop&w=600&q=80",
+            "description": "Durable cotton-elastic blend band with inner rubber anti-roll grip stripes."
         },
         {
-            "category": "Fitness", "name": "Under Desk Walking Pad Treadmill",
-            "price": 450000.00, "brand": "WalkingPad", "countInStock": 12,
-            "image": "https://images.unsplash.com/photo-1434682881908-b43d0467b798?w=500&q=80",
-            "description": "Ultra-quiet motor architecture collapsing flat to slip underneath desk setups."
+            "category": "Fitness", "name": "Silicone Treadmill Belt Lubricant Oil (100ml)",
+            "price": 5800.00, "brand": "WalkingPad", "countInStock": 30,
+            "image": "https://images.unsplash.com/photo-1576678927484-cc907957088c?auto=format&fit=crop&w=600&q=80",
+            "description": "100% pure silicone spray reducing motor drag and extending treadmill life."
         },
         {
-            "category": "Fitness", "name": "Speed-Lock Professional Jump Rope",
-            "price": 52500.00, "brand": "Rogue Fitness", "countInStock": 45,
-            "image": "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=500&q=80",
-            "description": "Dual ball-bearing hardware assembly maximizing spin fluid metrics for drills."
+            "category": "Fitness", "name": "Speed Skipping Rope with Ball Bearings",
+            "price": 7000.00, "brand": "Rogue Fitness", "countInStock": 45,
+            "image": "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&w=600&q=80",
+            "description": "Adjustable kink-resistant steel wire rope engineered for smooth rotations."
         },
         {
-            "category": "Fitness", "name": "Insulated Stainless Steel Shaker Bottle",
-            "price": 49500.00, "brand": "BlenderBottle", "countInStock": 40,
-            "image": "https://images.unsplash.com/photo-1593085512500-5d55148d6f0d?w=500&q=80",
-            "description": "Double-wall vacuum barrier layer preserving optimal nutritional mixing temperatures."
+            "category": "Fitness", "name": "Protein Shaker Cup with Wire Whisk Ball (700ml)",
+            "price": 6200.00, "brand": "BlenderBottle", "countInStock": 50,
+            "image": "https://images.unsplash.com/photo-1577937927133-66ef06acdf18?auto=format&fit=crop&w=600&q=80",
+            "description": "BPA-free leakproof mixing cup featuring surgical stainless steel whisk wire."
         },
         {
-            "category": "Fitness", "name": "Ergonomic Abdominal Roller Wheel",
-            "price": 33000.00, "brand": "Everlast", "countInStock": 30,
-            "image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&q=80",
-            "description": "Core stability fitness exercise wheel ab roller."
+            "category": "Fitness", "name": "Non-Slip Exercise Push-Up Stands (Pair)",
+            "price": 8000.00, "brand": "Everlast", "countInStock": 35,
+            "image": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80",
+            "description": "Ergonomic foam-grip pushup bars reducing wrist strain during workouts."
         }
     ]
 
