@@ -5,8 +5,8 @@ from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-premium-shop-super-secret-key-matrix'
-DEBUG = True
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-premium-shop-super-secret-key-matrix')
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
@@ -24,8 +24,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -53,29 +53,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-USE_MYSQL = True
-
-if USE_MYSQL:
+# Database Setup: Cloud PostgreSQL (Neon/Render) via DATABASE_URL, fallback to SQLite
+if 'DATABASE_URL' in os.environ:
     DATABASES = {
-        'default': {
-            'ENGINE': 'mysql.connector.django',
-            'NAME': 'ecom_db',
-            'USER': 'root',
-            'PASSWORD': '',  # Add your MySQL password here if you set one
-            'HOST': '127.0.0.1',
-            'PORT': '3306',
-            'OPTIONS': {
-                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            },
-        }
+        'default': dj_database_url.config(
+            conn_max_age=600,
+            ssl_require=True
+        )
     }
 else:
-   DATABASES = {
-    'default': dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-        conn_max_age=600
-    )
-}
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -89,11 +81,18 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# CORS Headers
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -108,28 +107,19 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
 }
 
-CORS_ALLOW_ALL_ORIGINS = True
-
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'api.backends.EmailOrUsernameModelBackend',
-] 
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-
-EMAIL_HOST_USER = 'your_business_email@gmail.com'
-EMAIL_HOST_PASSWORD = 'your_gmail_app_password_here'
-
-STRIPE_WEBHOOK_SECRET = "whsec_YOUR_COPIED_SECRET_HERE"
+]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-STRIPE_SECRET_KEY = "sk_test_51OFaROHWdvWZgZ721bHhxnvcch2CDcVTlVvQkENzucRcYvwKeMvuWirMdx9TpE4olqCs1f8XFVIbE1uzjUahPrsB00YXFmZz7v"
-STRIPE_PUBLIC_KEY = "pk_test_51OFaROHWdvWZgZ72CEInbZ0KOZVH2rCpl1ESttzH1rnyt3NQtvjHw1EirH2GsXs7QLGokOg2weBoqFp6QCrvxDb000lYS7sQth"
+STRIPE_SECRET_KEY = os.environ.get(
+    'STRIPE_SECRET_KEY', 
+    'sk_test_51OFaROHWdvWZgZ721bHhxnvcch2CDcVTlVvQkENzucRcYvwKeMvuWirMdx9TpE4olqCs1f8XFVIbE1uzjUahPrsB00YXFmZz7v'
+)
+STRIPE_PUBLIC_KEY = os.environ.get(
+    'STRIPE_PUBLIC_KEY', 
+    'pk_test_51OFaROHWdvWZgZ72CEInbZ0KOZVH2rCpl1ESttzH1rnyt3NQtvjHw1EirH2GsXs7QLGokOg2weBoqFp6QCrvxDb000lYS7sQth'
+)
+STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', 'whsec_YOUR_COPIED_SECRET_HERE')
